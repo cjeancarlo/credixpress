@@ -1,0 +1,30 @@
+{
+    "npmScope": "credix",
+    "implicitDependencies": {
+        "angular.json": "*",
+        "package.json": "*",
+        "tsconfig.json": "*",
+        "tslint.json": "*",
+        "nx.json": "*"
+    },
+    "projects": {
+        "admin": {
+            "tags": []
+        },
+        "admin-e2e": {
+            "tags": []
+        },
+        "client": {
+            "tags": []
+        },
+        "client-e2e": {
+            "tags": []
+        },
+        "table-inline-edit": {
+            "tags": []
+        },
+        "material": {
+            "tags": []
+        }
+    }
+}
