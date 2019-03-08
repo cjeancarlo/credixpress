@@ -128,8 +128,11 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    * @param row Row to be edited.
    */
   confirmEdit(row: TableElement<T>): boolean {
+    console.log(row);
     if (!row.isValid()) {
       return false;
+    } else {
+      console.log(row.validator.errors);
     }
 
     const source = this.rowsSubject.getValue();

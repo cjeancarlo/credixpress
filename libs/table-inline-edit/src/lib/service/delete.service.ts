@@ -10,7 +10,8 @@ export class BancoValidatorService  implements ValidatorService{
   getRowValidator(): FormGroup {
     return new FormGroup({
       'name': new FormControl(null, Validators.required),
-      'age': new FormControl(),
+      'age': new FormControl(null, Validators.required),
+      'sex': new FormControl(null,Validators.required),
       });
   }
 }

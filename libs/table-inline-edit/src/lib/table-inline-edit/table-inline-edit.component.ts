@@ -30,13 +30,13 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<TableElement<any>>(true, []);
   
   
-  displayedColumns = ['name', 'age', 'actionsColumn'];
+  displayedColumns = [ 'name', 'age','sex',  'actionsColumn'];
   faPlus = faPlus;
   faPen = faPen;
   faTimes = faTimes;
   faSave = faSave;
 
-
+  options = ['uno','dos','tres'];
   
   @Input() personList = [ 
     { name: 'Mark', age: 15 },

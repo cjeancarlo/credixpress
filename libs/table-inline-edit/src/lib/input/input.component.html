@@ -1,0 +1,10 @@
+<ng-container *ngIf="rowElement.editing">
+    <mat-form-field floatLabel="{{ rowElement.editing ? 'float' : 'never'}}">
+        <input matInput [formControl]="rowElement.validator.controls['age']" placeholder="Age">
+    </mat-form-field>
+</ng-container>
+<ng-container *ngIf="!rowElement.editing">
+    <div class="mat-form-field-flex">
+        {{rowElement.validator.controls['age'].value}}
+    </div>
+</ng-container>
