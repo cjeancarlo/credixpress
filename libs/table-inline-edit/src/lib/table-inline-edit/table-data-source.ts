@@ -1,12 +1,9 @@
 import { BehaviorSubject, Subject } from 'rxjs';
-
 import { TableElementFactory } from './table-element.factory';
 import { ValidatorService } from '../service/validator.service';
 import { TableElement } from './table-element';
 import { DefaultValidatorService } from '../service/default-validator-service.service';
 import { MatTableDataSource } from '@angular/material';
-
-
 
 export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
 
@@ -16,7 +13,6 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
   protected dataConstructor: new () => T;
   protected dataKeys: any[];
   protected currentData: any;
-
 
   /**
    * Creates a new TableDataSource instance, that can be used as datasource of `@angular/cdk` data-table.
@@ -73,7 +69,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
   /**
    * Start the creation of a new element, pushing an empty-data row in the table.
    */
-  createNew(): void {
+  createNew(pos = 0 ): void {
     const source = this.rowsSubject.getValue();
 
     if (!this.existsNewElement(source)) {
@@ -90,16 +86,13 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
         this.rowsSubject.next([newElement].concat(source));
       } else {
 
-        source.push(newElement);
-        this.rowsSubject.next(source);
         
-        console.log(newElement, source )
-        this.data =source;/* .push(newElement);*/
+        source.splice(pos, 0, newElement);
+        this.rowsSubject.next(source);
+        this.data = source;
         this._updateChangeSubscription();
       }
     }
-  
-    
   }
 
   /**
@@ -115,7 +108,6 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
     const source = this.rowsSubject.getValue();
     row.id = source.length - 1;
     this.rowsSubject.next(source);
-
     row.editing = false;
 
     this.updateDatasourceFromRows(source);
@@ -128,7 +120,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    * @param row Row to be edited.
    */
   confirmEdit(row: TableElement<T>): boolean {
-    console.log(row);
+    console.log(!row.isValid());
     if (!row.isValid()) {
       return false;
     } else {
@@ -154,16 +146,8 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
   delete(id: number): void {
     const source = this.rowsSubject.getValue()
       .filter( (data) =>  data.id!==id  );;
-    //const index = this.getIndexFromRowId(id, source);
-
-    /*source.splice(index, 1);
-    this.updateRowIds(index, source);*/
-
     this.rowsSubject.next(source);
-        
     this.data = source;
-    
-    
   }
 
   /**
@@ -201,7 +185,13 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    * @param source
    */
   protected existsNewElement(source: TableElement<T>[]): boolean {
-      return !(source.length === 0 || source[this.getNewRowIndex(source)].id > -1)
+
+    const  exists = source
+    .map(function (element) {return element.id;})
+    .indexOf(-1);
+    
+    return exists !== -1;
+
   }
 
   /**
@@ -320,22 +310,12 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
     }
 
   }
-
-  
-
-
   /** Connect function called by the table to retrieve one stream containing
    *  the data to render. */
   /*connect(): Observable<TableElement<T>[]> {
     return this.rowsSubject.asObservable();
   }*/
 
-  /** Connect function called by the table to retrieve one stream containing
-   *  the data to render. */
+  
 
-   /*connect(): BehaviorSubject<TableElement<T>[]> {
-        return this.rowsSubject ;
-  }*/
-
-  disconnect() { }
 }

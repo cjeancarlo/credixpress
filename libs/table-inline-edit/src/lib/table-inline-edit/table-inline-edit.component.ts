@@ -7,12 +7,9 @@ import { MatPaginator } from '@angular/material';
 import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icons';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TableElement } from './table-element';
+import { Banco } from '../models/banco.model';
 
-export class Person {
-  name: string;
-  age: number;
 
-}
 
 
 @Component({
@@ -20,29 +17,38 @@ export class Person {
   templateUrl: './table-inline-edit.component.html',
   styleUrls: ['./table-inline-edit.component.scss'],
   providers: [
-    {provide: ValidatorService, useClass: BancoValidatorService }
+    { provide: ValidatorService, useClass: BancoValidatorService }
   ],
 })
 export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
   constructor(private personValidator: ValidatorService) { }
-  
+
   selection = new SelectionModel<TableElement<any>>(true, []);
-  
-  
-  displayedColumns = [ 'name', 'age','sex',  'actionsColumn'];
+
+  ModelObject = {
+    columns: [
+      { name: 'name', type: 'string', required: false, search: true, editType: 'INPUT' },
+      { name: 'age', type: 'number', required: false, search: true, editType: 'INPUT' },
+      { name: 'sex', type: 'number', required: false, search: false, editType: 'SELECT' },
+      { name: 'actionsColumn', editType: 'actionsColumn' },
+    ]
+  }
+
+  displayedColumns = [];
+  searchColumns = [];
   faPlus = faPlus;
   faPen = faPen;
   faTimes = faTimes;
   faSave = faSave;
 
-  options = ['uno','dos','tres'];
-  
-  @Input() personList = [ 
-    { name: 'Mark', age: 15 },
-    { name: 'Brad', age: 51 },
-    { name: 'Brd', age: 52 },
-    { name: 'Brd', age: 530 },
+  options = ['M', 'F', 'N/A'];
+  @Input() MODELO = '../models/banco.model';
+  @Input() personList = [
+    { name: 'jeancarlos cartaya', age: 40 },
+    { name: 'Optimus Prime', age: 51 },
+    { name: 'Megatron', age: 50 },
+    { name: 'Peter Parker', age: 53 },
     { name: 'Bad', age: 540 },
     { name: 'Bra', age: 550 },
     { name: 'Brad', age: 650 },
@@ -51,44 +57,78 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     { name: 'Bd', age: 506 },
     { name: 'B', age: 503 },
     { name: 'Bad', age: 250 },
-  ] ;
-  
+  ];
+
   dataSource: TableDataSource<any>;
-  
+
   @Output() personListChange = new EventEmitter<any[]>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  
 
   ngOnInit() {
     
-    this.dataSource = new TableDataSource<any>(this.personList, 
-     Person ,  this.personValidator);
-/*
-    this.dataSource.datasourceSubject.subscribe(personList => 
-      this.personListChange.emit(personList)
-    );
+    import('../models/banco.model').then(model => {
     
-    console.log(this.dataSource.data);*/
+      console.log(model);
+      
+  });
+
+  this.dataSource = new TableDataSource<any>(this.personList,
+    Banco, this.personValidator);  // JUST USE THE LIBRARY    
+    
+    this.displayedColumns = this.getDisplayedColumns();
+    this.searchColumns = this.getDisplayedColumns('search');
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-}
 
-/** Whether the number of selected elements matches the total number of rows. */
-isAllSelected() {
-  const numSelected = this.selection.selected.length;
-  const numRows = this.dataSource.data.length;
-  return numSelected === numRows;
-}
+    this.dataSource.filterPredicate = (data, filter) => {
+      let value = '';
+      this.searchColumns.forEach(e => {
+        if (data.currentData.hasOwnProperty(e)) {
+          value += data.currentData[e];
+        }
+      }
+      )
+      return (value).trim().toLowerCase().indexOf(filter) !== -1;
+    }
 
-/** Selects all rows if they are not all selected; otherwise clear selection. */
-masterToggle() {
-  this.isAllSelected() ?
-  this.selection.clear() :
-  this.dataSource.data.forEach(row => this.selection.select(row));
+  }
 
-}
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
+
+  }
+
+  createNew() {
+    const pos = this.paginator.pageIndex * this.paginator.pageSize;
+    
+    this.dataSource.createNew(pos);
+  }
+
+  getDisplayedColumns(tipo = 'name'): string[] {
+    if (tipo === 'search') {
+      return this.ModelObject.columns.map(item => {
+        if (item.search) {
+          return item.name
+        };
+      });
+    }
+    return this.ModelObject.columns.map(item => item[tipo]);
+  }
 
 }
