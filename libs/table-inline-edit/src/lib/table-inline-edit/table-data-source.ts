@@ -33,6 +33,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
       this.validatorService = new DefaultValidatorService();
 
     if (dataType) {
+      
       this.dataConstructor = dataType;
     } else {
       if (dataInput && dataInput.length > 0)

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input,  ViewChild, AfterViewInit } from '@angular/core';
 import { ValidatorService } from '../service/validator.service';
 import { TableDataSource } from './table-data-source';
 
@@ -7,15 +7,13 @@ import { MatPaginator } from '@angular/material';
 import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icons';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TableElement } from './table-element';
-import { Banco } from '../models/banco.model';
-
-
-
+import {  EnterLeave } from './table-inline.animations';
 
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
   styleUrls: ['./table-inline-edit.component.scss'],
+  animations: [ EnterLeave ],
   providers: [
     { provide: ValidatorService, useClass: BancoValidatorService }
   ],
@@ -26,14 +24,6 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
   selection = new SelectionModel<TableElement<any>>(true, []);
 
-  ModelObject = {
-    columns: [
-      { name: 'name', type: 'string', required: false, search: true, editType: 'INPUT' },
-      { name: 'age', type: 'number', required: false, search: true, editType: 'INPUT' },
-      { name: 'sex', type: 'number', required: false, search: false, editType: 'SELECT' },
-      { name: 'actionsColumn', editType: 'actionsColumn' },
-    ]
-  }
 
   displayedColumns = [];
   searchColumns = [];
@@ -43,7 +33,10 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   faSave = faSave;
 
   options = ['M', 'F', 'N/A'];
-  @Input() MODELO = '../models/banco.model';
+  @Input() modelClass: any;
+  @Input() modelObject;
+
+
   @Input() personList = [
     { name: 'jeancarlos cartaya', age: 40 },
     { name: 'Optimus Prime', age: 51 },
@@ -61,20 +54,13 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
   dataSource: TableDataSource<any>;
 
-  @Output() personListChange = new EventEmitter<any[]>();
+  
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
-    
-    import('../models/banco.model').then(model => {
-    
-      console.log(model);
-      
-  });
+    this.dataSource = new TableDataSource<any>(this.personList,
+      this.modelClass, this.personValidator);  // JUST USE THE LIBRARY    
 
-  this.dataSource = new TableDataSource<any>(this.personList,
-    Banco, this.personValidator);  // JUST USE THE LIBRARY    
-    
     this.displayedColumns = this.getDisplayedColumns();
     this.searchColumns = this.getDisplayedColumns('search');
   }
@@ -82,6 +68,12 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
 
+    this.filterDefinition();
+  }
+
+  /** metodo define el filtro basado en el Objeto ""ModelObject.columns.search:true"" 
+    y crea un arreglo con las columnas habilitadas pára la busqueda*/
+  private filterDefinition() {
     this.dataSource.filterPredicate = (data, filter) => {
       let value = '';
       this.searchColumns.forEach(e => {
@@ -92,9 +84,9 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       )
       return (value).trim().toLowerCase().indexOf(filter) !== -1;
     }
-
   }
-
+  /** inicializa el filtro definido en filterPredicate 
+   */
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -106,29 +98,32 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  /** Selects all rows if they are not all 
+    selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
 
   }
-
-  createNew() {
+/**agrega un registro el la primera posicion del 
+ arreglo de registro mostrndo en la pantalla 
+*/
+createNew() {
     const pos = this.paginator.pageIndex * this.paginator.pageSize;
-    
     this.dataSource.createNew(pos);
   }
 
   getDisplayedColumns(tipo = 'name'): string[] {
     if (tipo === 'search') {
-      return this.ModelObject.columns.map(item => {
+      return this.modelObject.columns.map(item => {
         if (item.search) {
           return item.name
         };
       });
     }
-    return this.ModelObject.columns.map(item => item[tipo]);
+    return this.modelObject.columns.map(item => item[tipo]);
   }
+
 
 }
