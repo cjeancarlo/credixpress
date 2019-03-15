@@ -13,7 +13,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
   protected dataConstructor: new () => T;
   protected dataKeys: any[];
   protected currentData: any;
-
+  
   /**
    * Creates a new TableDataSource instance, that can be used as datasource of `@angular/cdk` data-table.
    * @param dataInput Array containing the initial values for the TableDataSource. If not specified, then `dataType` must be specified.
@@ -28,7 +28,9 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
     private config = { prependNewElements: false, suppressErrors: false })
   {
     super();
-
+    
+    
+    console.log(validatorService);
     if (!validatorService)
       this.validatorService = new DefaultValidatorService();
 
@@ -51,6 +53,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
   }
 
   protected checkValidatorFields(validatorService: ValidatorService) {
+    
     const formGroup = validatorService.getRowValidator();
     if(formGroup != null) {
       const rowKeys = Object.keys(this.createNewObject());
@@ -121,7 +124,6 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    * @param row Row to be edited.
    */
   confirmEdit(row: TableElement<T>): boolean {
-    console.log(!row.isValid());
     if (!row.isValid()) {
       return false;
     } else {

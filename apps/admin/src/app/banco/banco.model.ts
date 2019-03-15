@@ -1,6 +1,8 @@
 export class Banco {
-    name: string;
-    age: number;
-    sex: string;
+    nombre: string;
+    codigo: number;
+    ciudad: number;
+    estado: number;
   }
+  
   

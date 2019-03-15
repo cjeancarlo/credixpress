@@ -1,74 +1,52 @@
-import { Component, OnInit, Input,  ViewChild, AfterViewInit } from '@angular/core';
-import { ValidatorService } from '../service/validator.service';
+import { Component, OnInit,  ViewChild, AfterViewInit } from '@angular/core';
 import { TableDataSource } from './table-data-source';
 
-import { BancoValidatorService } from '../service/delete.service';
 import { MatPaginator } from '@angular/material';
 import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icons';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TableElement } from './table-element';
 import {  EnterLeave } from './table-inline.animations';
+import { TableElementDataService } from './table-element-data.service';
 
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
   styleUrls: ['./table-inline-edit.component.scss'],
   animations: [ EnterLeave ],
-  providers: [
-    { provide: ValidatorService, useClass: BancoValidatorService }
-  ],
+
 })
 export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
-  constructor(private personValidator: ValidatorService) { }
-
+  
   selection = new SelectionModel<TableElement<any>>(true, []);
-
-
+  
   displayedColumns = [];
   searchColumns = [];
   faPlus = faPlus;
   faPen = faPen;
   faTimes = faTimes;
   faSave = faSave;
-
+  
   options = ['M', 'F', 'N/A'];
-  @Input() modelClass: any;
-  @Input() modelObject;
-
-
-  @Input() personList = [
-    { name: 'jeancarlos cartaya', age: 40 },
-    { name: 'Optimus Prime', age: 51 },
-    { name: 'Megatron', age: 50 },
-    { name: 'Peter Parker', age: 53 },
-    { name: 'Bad', age: 540 },
-    { name: 'Bra', age: 550 },
-    { name: 'Brad', age: 650 },
-    { name: 'Bad', age: 560 },
-    { name: 'Ba', age: 506 },
-    { name: 'Bd', age: 506 },
-    { name: 'B', age: 503 },
-    { name: 'Bad', age: 250 },
-  ];
-
+  modelObject;
+  
   dataSource: TableDataSource<any>;
-
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngOnInit() {
-    this.dataSource = new TableDataSource<any>(this.personList,
-      this.modelClass, this.personValidator);  // JUST USE THE LIBRARY    
+  constructor( private tableElementDataService:TableElementDataService) { 
+    this.dataSource = this.tableElementDataService.dataSource;
+    this.modelObject= this.tableElementDataService.modelObject;
+  }
 
+  ngOnInit() { 
     this.displayedColumns = this.getDisplayedColumns();
     this.searchColumns = this.getDisplayedColumns('search');
+    this.filterDefinition();
+    this.dataSource.paginator = this.paginator;
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-
-    this.filterDefinition();
   }
 
   /** metodo define el filtro basado en el Objeto ""ModelObject.columns.search:true"" 
@@ -78,10 +56,19 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       let value = '';
       this.searchColumns.forEach(e => {
         if (data.currentData.hasOwnProperty(e)) {
-          value += data.currentData[e];
+          
+            value += 
+            /**si la data viene de un input SELECT, mapeo del objeto 
+             * para obtener la descripcion*/
+            typeof data.currentData[e] === "object" ? 
+            data.currentData[e].descripcion : 
+            data.currentData[e];
+          
+          
         }
       }
       )
+      //console.log(value);
       return (value).trim().toLowerCase().indexOf(filter) !== -1;
     }
   }
@@ -106,6 +93,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       this.dataSource.data.forEach(row => this.selection.select(row));
 
   }
+
 /**agrega un registro el la primera posicion del 
  arreglo de registro mostrndo en la pantalla 
 */
@@ -116,14 +104,14 @@ createNew() {
 
   getDisplayedColumns(tipo = 'name'): string[] {
     if (tipo === 'search') {
-      return this.modelObject.columns.map(item => {
+      return this.modelObject.fields.map(item => {
         if (item.search) {
           return item.name
         };
       });
     }
-    return this.modelObject.columns.map(item => item[tipo]);
-  }
 
+    return this.modelObject.fields.map(item => item[tipo]);
+  }
 
 }

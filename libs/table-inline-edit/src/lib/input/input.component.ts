@@ -9,13 +9,10 @@ import { TableElement } from '../table-inline-edit/table-element';
 
 export class InputComponent implements OnInit {
   @Input() rowElement: TableElement<any>;
+  @Input() field: any;
   
-  constructor() { 
+  constructor() { }
 
-
-  }
-
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }
