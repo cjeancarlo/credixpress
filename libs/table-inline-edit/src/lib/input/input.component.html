@@ -1,3 +1,3 @@
 <mat-form-field floatLabel="{{ rowElement.editing ? 'float' : 'never'}}">
-    <input matInput [formControl]="rowElement.validator.controls[field.name]" [readonly]="!rowElement.editing" placeholder="field.name">
+    <input matInput [formControl]="rowElement.validator.controls[field.name]" [readonly]="!rowElement.editing" placeholder="field.name" autocomplete="nope">
 </mat-form-field>

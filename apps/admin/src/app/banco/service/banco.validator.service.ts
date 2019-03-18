@@ -14,25 +14,41 @@ export class BancoValidatorService implements ValidatorService {
   public BancoObject = {
     fields: [
       { 
-        name: 'codigo', type: 'number', search: true, editType: 'INPUT', validators: [Validators.required ] 
+        name: 'codigo', type: 'number', search: true, editType: 'INPUT', 
+        validators: [Validators.required ] 
       },
       { 
-        name: 'nombre', type: 'string', search: true, editType: 'INPUT', validators: [Validators.required] 
+        name: 'nombre', type: 'string', search: true, editType: 'INPUT', 
+        validators: [Validators.required] 
       },
       {
-        name: 'estado', type: 'number', search: true, editType: 'SELECT', validators: [Validators.required],
+        name: 'pais', type: 'number', search: true, editType: 'SELECT', 
+        validators: [Validators.required],
         selectConfig: { 
           filterField: 'descripcion',
           optionSource: this._ubicacionService.getCountries(),
-          parentKey: null 
+          parentKey: null, 
+          childKey: 'estado'
         }
       },
       {
-        name: 'ciudad', type: 'number', search: true, editType: 'SELECT', validators: [Validators.required],
+        name: 'estado', type: 'number', search: true, editType: 'SELECT', 
+        validators: [Validators.required],
         selectConfig: { 
           filterField: 'descripcion',
-          optionSource: this._ubicacionService.getStates(), 
-          parentKey: 'estado' 
+          optionSource: this._ubicacionService.getStates(),
+          parentKey: 'pais', 
+          childKey: 'ciudad'
+        }
+      },
+      {
+        name: 'ciudad', type: 'number', search: true, editType: 'SELECT',
+       validators: [Validators.required],
+        selectConfig: { 
+          filterField: 'descripcion',
+          optionSource: this._ubicacionService.getCities() , 
+          parentKey: 'estado' ,
+          childKey: null
         }
       },
       { name: 'actionsColumn', editType: 'ACTIONSCOLUMN' },
