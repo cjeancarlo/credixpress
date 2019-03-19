@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BancoComponent } from './banco.component';
 import { Routes, RouterModule } from '@angular/router';
 
-import { TableInlineEditModule } from '@credix/table-inline-edit';
+import { ComponentsModule } from '@credix/components';
 
 export const routes: Routes = [
   {
@@ -14,7 +14,7 @@ export const routes: Routes = [
 
 @NgModule({
   imports: [
-    TableInlineEditModule,
+    ComponentsModule,
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule],

@@ -20,7 +20,7 @@
 
                 <credix-input [rowElement]="row" [field]="field" *ngIf="field.editType ==='INPUT'"></credix-input>
                 <credix-select [rowElement]="row" [field]="field" *ngIf="field.editType ==='SELECT'"></credix-select>
-
+                <credix-display [rowElement]="row" [field]="field" *ngIf="field.editType ==='NONE'"></credix-display>
                 <ng-container *ngIf="field.editType ==='ACTIONSCOLUMN'">
                     <button *ngIf="!row.editing" mat-icon-button color="primary" focusable="false" (click)="row.startEdit()">
                                 <fa-icon [icon]="faPen"  ></fa-icon>

@@ -7,7 +7,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { TableElement } from './table-element';
 import {  EnterLeave } from './table-inline.animations';
 import { TableElementDataService } from './table-element-data.service';
-
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
@@ -16,7 +15,6 @@ import { TableElementDataService } from './table-element-data.service';
 
 })
 export class TableInlineEditComponent implements OnInit, AfterViewInit {
-
   
   selection = new SelectionModel<TableElement<any>>(true, []);
   
@@ -26,9 +24,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   faPen = faPen;
   faTimes = faTimes;
   faSave = faSave;
-  
-  options = ['M', 'F', 'N/A'];
-  modelObject;
+  modelObject: any;
   
   dataSource: TableDataSource<any>;
   
@@ -46,25 +42,21 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {  }
 
   /** metodo define el filtro basado en el Objeto ""ModelObject.columns.search:true"" 
     y crea un arreglo con las columnas habilitadas pára la busqueda*/
   private filterDefinition() {
     this.dataSource.filterPredicate = (data, filter) => {
       let value = '';
-      this.searchColumns.forEach(e => {
-        if (data.currentData.hasOwnProperty(e)) {
-          
+      this.searchColumns.forEach(element => {
+        if (data.currentData.hasOwnProperty(element)) {
             value += 
             /**si la data viene de un input SELECT, mapeo del objeto 
              * para obtener la descripcion*/
-            typeof data.currentData[e] === "object" ? 
-            data.currentData[e].descripcion : 
-            data.currentData[e];
-          
-          
+            typeof data.currentData[element] === "object" ? 
+            data.currentData[element].description : 
+            data.currentData[element];
         }
       }
       )

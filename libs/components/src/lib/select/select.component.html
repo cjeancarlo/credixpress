@@ -1,0 +1,8 @@
+<mat-form-field class="example-full-width" floatLabel="{{ rowElement.editing ? 'float' : 'never'}}">
+    <input name="rowElement.validator.controls[field.name]" type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="rowElement.validator.controls[field.name]" [matAutocomplete]="auto" autocomplete="NOP" (focus)="updatefilteredOptions()">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn.bind(this)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (onSelectionChange)="onEnter($event)">
+            {{option[displayField]}}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

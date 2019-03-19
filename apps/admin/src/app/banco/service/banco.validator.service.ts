@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ValidatorService } from '@credix/table-inline-edit';
+import { ValidatorService } from '@credix/components';
 import { UbicacionService } from '@credix/back-end';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class BancoValidatorService implements ValidatorService {
   public BancoObject = {
     fields: [
       { 
-        name: 'codigo', type: 'number', search: true, editType: 'INPUT', 
+        name: 'codigo', type: 'number', search: true, editType: 'NONE', 
         validators: [Validators.required ] 
       },
       { 
@@ -25,7 +25,7 @@ export class BancoValidatorService implements ValidatorService {
         name: 'pais', type: 'number', search: true, editType: 'SELECT', 
         validators: [Validators.required],
         selectConfig: { 
-          filterField: 'descripcion',
+          filterField: 'description',
           optionSource: this._ubicacionService.getCountries(),
           parentKey: null, 
           childKey: 'estado'
@@ -35,7 +35,7 @@ export class BancoValidatorService implements ValidatorService {
         name: 'estado', type: 'number', search: true, editType: 'SELECT', 
         validators: [Validators.required],
         selectConfig: { 
-          filterField: 'descripcion',
+          filterField: 'description',
           optionSource: this._ubicacionService.getStates(),
           parentKey: 'pais', 
           childKey: 'ciudad'
@@ -45,7 +45,7 @@ export class BancoValidatorService implements ValidatorService {
         name: 'ciudad', type: 'number', search: true, editType: 'SELECT',
        validators: [Validators.required],
         selectConfig: { 
-          filterField: 'descripcion',
+          filterField: 'description',
           optionSource: this._ubicacionService.getCities() , 
           parentKey: 'estado' ,
           childKey: null
