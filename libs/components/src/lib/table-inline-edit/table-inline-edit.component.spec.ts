@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableInlineEditComponent } from './table-inline-edit.component';
+import { TableInlineEditComponent } from './components.component';
 
 describe('TableInlineEditComponent', () => {
   let component: TableInlineEditComponent;

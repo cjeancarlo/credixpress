@@ -13,7 +13,7 @@
     "lib": ["es2017", "dom"],
     "baseUrl": ".",
     "paths": {
-      "@credix/table-inline-edit": ["libs/table-inline-edit/src/index.ts"],
+      "@credix/components": ["libs/components/src/index.ts"],
       "@credix/material": ["libs/material/src/index.ts"],
       "@credix/back-end": ["libs/back-end/src/index.ts"]
     }

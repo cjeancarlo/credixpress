@@ -1,6 +1,7 @@
 export interface OptionsItems {
     id: number;
-    parentId: number;
-    descripcion: string;
+    parentId: number | string;
+    description: string;
+    category: number | string;
 
 }

@@ -26,9 +26,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   faPen = faPen;
   faTimes = faTimes;
   faSave = faSave;
-  
-  options = ['M', 'F', 'N/A'];
-  modelObject;
+  modelObject: any;
   
   dataSource: TableDataSource<any>;
   
@@ -54,15 +52,14 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   private filterDefinition() {
     this.dataSource.filterPredicate = (data, filter) => {
       let value = '';
-      this.searchColumns.forEach(e => {
-        if (data.currentData.hasOwnProperty(e)) {
-          
+      this.searchColumns.forEach(element => {
+        if (data.currentData.hasOwnProperty(element)) {
             value += 
             /**si la data viene de un input SELECT, mapeo del objeto 
              * para obtener la descripcion*/
-            typeof data.currentData[e] === "object" ? 
-            data.currentData[e].descripcion : 
-            data.currentData[e];
+            typeof data.currentData[element] === "object" ? 
+            data.currentData[element].descripcion : 
+            data.currentData[element];
           
           
         }

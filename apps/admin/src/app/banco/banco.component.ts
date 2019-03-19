@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Banco } from './banco.model';
-import { ValidatorService, TableDataSource } from '@credix/table-inline-edit';
+import { ValidatorService, TableDataSource } from '@credix/components';
 import { BancoValidatorService } from './service/banco.validator.service';
-import { TableElementDataService } from '@credix/table-inline-edit';
+import { TableElementDataService } from '@credix/components';
 
 @Component({
   selector: 'credix-banco',
@@ -15,18 +15,18 @@ import { TableElementDataService } from '@credix/table-inline-edit';
 export class BancoComponent  {
 
   bancoList = [
-    { nombre: 'jeancarlos cartaya', codigo: 40 },
-    { nombre: 'Optimus Prime', codigo: 51 },
-    { nombre: 'Megatron', codigo: 50 },
-    { nombre: 'Peter Parker', codigo: 53 },
-    { nombre: 'Bad', codigo: 540 },
-    { nombre: 'Bra', codigo: 550 },
-    { nombre: 'Brad', codigo: 650 },
-    { nombre: 'Bad', codigo: 560 },
-    { nombre: 'Ba', codigo: 506 },
-    { nombre: 'Bd', codigo: 506 },
-    { nombre: 'B', codigo: 503 },
-    { nombre: 'Bad', codigo: 250 },
+    { nombre: 'jeancarlos cartaya', codigo: 40  },
+    { nombre: 'Optimus Prime', codigo: 51, pais:1 },
+    { nombre: 'Megatron', codigo: 50, pais:2, estado: 52, ciudad:552  },
+    { nombre: 'Peter Parker', codigo: 53, pais:1 },
+    { nombre: 'Bad', codigo: 540, pais:1 },
+    { nombre: 'Bra', codigo: 550 , pais:1},
+    { nombre: 'Brad', codigo: 650 , pais:1},
+    { nombre: 'Bad', codigo: 560 , pais:2},
+    { nombre: 'Ba', codigo: 506 , pais:2},
+    { nombre: 'Bd', codigo: 506 , pais:1},
+    { nombre: 'B', codigo: 503 , pais:1 },
+    { nombre: 'Bad', codigo: 250 , pais:1},
   ];
 
   constructor(  public  bancoValidator: BancoValidatorService, private tableElementDataService: TableElementDataService  ){

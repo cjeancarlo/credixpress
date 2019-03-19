@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable , from } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { TableElement } from '../table-inline-edit/table-element';
 import { MatAutocompleteTrigger, MatOptionSelectionChange } from '@angular/material';
+import { UbicacionService } from '@credix/back-end';
 
 @Component({
   selector: 'credix-select',
@@ -19,7 +20,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
   displayField: string;
   filteredOptions: Observable<string[]>;
 
-  constructor() { }
+  constructor(private _ubicacionService: UbicacionService ) { }
 
   ngOnInit() {
     this.displayField = this.field.selectConfig.filterField;
@@ -27,20 +28,14 @@ export class SelectComponent implements OnInit, AfterViewInit {
       startWith(''),
       map(value => this._filter(value))
     );
-
-    /*this.getFormcontrol().valueChanges.subscribe(() => {
- 
-  })*/
   }
 
   ngAfterViewInit() {
     this.forceSelection();
   }
 
-  /**obliga a seleccionar una opcion valida en el input */
+  /**limpia cualquier valorno proveniente de las opciones desplegadas*/
   private forceSelection() {
-
-    
         this.trigger.panelClosingActions
       .subscribe((e: any) => {
         if (!(e && e.source ||
@@ -57,13 +52,13 @@ export class SelectComponent implements OnInit, AfterViewInit {
       );
   }
 
+  /**limpia al hijo cuando el input paretn cambia de valor para mantener 
+   * la integridad de la cascada de datos */
   onEnter(evt: MatOptionSelectionChange ){
-    console.log(evt.source.value);
     const childKey = this.field.selectConfig.childKey;
     if ( this.field.selectConfig.childKey !== null){
     if (this.getFormcontrol(childKey).value &&
          evt.source.value.id !== this.getFormcontrol(childKey).value.parentId ){
-      this.getFormcontrol(childKey).setValue(null);
     }
   }
   }
@@ -73,14 +68,22 @@ export class SelectComponent implements OnInit, AfterViewInit {
    */
   private _filter(value: string): string[] {
     const filterField = this.field.selectConfig.filterField;
+    if (this.rowElement.editing ) {
     return this.getOptions().filter((option) =>
-      option[filterField].toLowerCase().indexOf(value) === 0
+      (''+option[filterField]).toLowerCase().indexOf(value) === 0
     );
+  }
   }
 
   /**Function that maps an option's control value to its display value in the trigger. */
   displayFn(op?: any): string | undefined {
-    return op ? op[this.displayField] : undefined;
+    /**Del backend viene un string o un number por lo que la descripcion no esta disponible
+     * asi que se invoca la funcion que buscar el objeto a partir de un ID unico
+     */
+    if(typeof op === 'number' ||  op === 'string') {
+      return this._ubicacionService.getRowfromId(op)[this.displayField];
+    }
+    return op && op[this.displayField] ? op[this.displayField] : undefined;
   }
 
   /** retorna un objeto de tipo FormControl */
@@ -98,14 +101,21 @@ export class SelectComponent implements OnInit, AfterViewInit {
       if (!this.getFormcontrol(parentKey).value) {
         return [];
       }
-      parentValue = this.getFormcontrol(parentKey).value
-
-      return this.field.selectConfig.optionSource.filter((option: any) =>
-        ('' + option['parentId']).indexOf('' + parentValue['id']) === 0
-      ) || [];
+      parentValue = this.getFormcontrol(parentKey).value;
+      const filteredArray =  this.field.selectConfig.optionSource.filter(
+        (option: any) => 
+          (option['parentId'] ===  (typeof parentValue === 'object' ? parentValue['id'] : parentValue))  
+        );
+        return filteredArray;
     }
-
     return this.field.selectConfig.optionSource || [];
+  }
+
+  /**metodo que actualiza el observable<string[]> cuando el input tiene el foco, es decir, actualiza
+   * la lista e elementos del input cuando recibe el foco
+  */
+  updatefilteredOptions(){
+    this.filteredOptions = from([this.getOptions()]);
   }
 
 }
