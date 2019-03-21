@@ -82,12 +82,16 @@ export class SelectComponent implements OnInit, AfterViewInit {
      * asi que se invoca la funcion que buscar el objeto a partir de un ID unico
      */
     if(typeof op === 'number' ||  op === 'string') {
+<<<<<<< HEAD:libs/components/src/lib/select/select.component.ts
     const value = this._ubicacionService.getRowfromId(op);
       /** actualiza  del codigo unico el el objeto tipo OptionItems, esto para 
        * permitir hacer busquedas en los campos tipo 'selec' usando el campo OptionItems.description
       */
       this.getFormcontrol().setValue(value);
       return value[this.displayField];
+=======
+      return this._ubicacionService.getRowfromId(op)[this.displayField];
+>>>>>>> 55c5148f8318c823e11fb7d1301a3cc6b53348cf:libs/components/src/lib/select/select.component.ts
     }
     return op && op[this.displayField] ? op[this.displayField] : undefined;
   }
