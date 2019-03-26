@@ -21,6 +21,10 @@ export class BancoValidatorService implements ValidatorService {
         name: 'nombre', type: 'string', search: true, editType: 'INPUT', 
         validators: [Validators.required] 
       },
+      { 
+        name: 'principal', type: 'boolean', search: true, editType: 'SLIDE', 
+        validators: [Validators.required] 
+      },
       {
         name: 'pais', type: 'number', search: true, editType: 'SELECT', 
         validators: [Validators.required],

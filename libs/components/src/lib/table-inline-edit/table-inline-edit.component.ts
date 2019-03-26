@@ -1,12 +1,16 @@
 import { Component, OnInit,  ViewChild, AfterViewInit } from '@angular/core';
-import { TableDataSource } from './table-data-source';
 
-import { MatPaginator } from '@angular/material';
-import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icons';
-import { SelectionModel } from '@angular/cdk/collections';
-import { TableElement } from './table-element';
-import {  EnterLeave } from './table-inline.animations';
 import { TableElementDataService } from './table-element-data.service';
+import { TableElement } from './table-element';
+import { TableDataSource } from './table-data-source';
+import { MatPaginator, MatSort, Sort } from '@angular/material';
+import {MatSnackBar} from '@angular/material';
+
+import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icons';
+
+import { SelectionModel } from '@angular/cdk/collections';
+import {  EnterLeave } from './table-inline.animations';
+import { MessageComponent } from '../message/message.component';
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
@@ -17,7 +21,7 @@ import { TableElementDataService } from './table-element-data.service';
 export class TableInlineEditComponent implements OnInit, AfterViewInit {
   
   selection = new SelectionModel<TableElement<any>>(true, []);
-  
+  sortedData: any[];
   displayedColumns = [];
   searchColumns = [];
   faPlus = faPlus;
@@ -29,8 +33,10 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   dataSource: TableDataSource<any>;
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-  constructor( private tableElementDataService:TableElementDataService) { 
+  constructor( private tableElementDataService:TableElementDataService,
+               private snackBar: MatSnackBar) { 
     this.dataSource = this.tableElementDataService.dataSource;
     this.modelObject= this.tableElementDataService.modelObject;
   }
@@ -39,6 +45,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     this.displayedColumns = this.getDisplayedColumns();
     this.searchColumns = this.getDisplayedColumns('search');
     this.filterDefinition();
+    
     this.dataSource.paginator = this.paginator;
   }
 
@@ -106,4 +113,9 @@ createNew() {
     return this.modelObject.fields.map(item => item[tipo]);
   }
 
+  openSnackBar() {
+    this.snackBar.openFromComponent(MessageComponent, {
+      data: 'nulo'
+    });
+  }
 }

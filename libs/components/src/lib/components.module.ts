@@ -7,12 +7,14 @@ import {  ReactiveFormsModule } from '@angular/forms';
 import { SelectComponent } from './select/select.component';
 import { InputComponent } from './input/input.component';
 import { DisplayComponent } from './display/display.component';
+import { SlideComponent } from './slide/slide.component';
+import { MessageComponent } from './message/message.component';
 
 
 
 @NgModule({
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
-  declarations: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent],
-  exports: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent]
+  declarations: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent],
+  exports: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent]
 })
 export class ComponentsModule {}

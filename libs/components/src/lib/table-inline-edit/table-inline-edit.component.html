@@ -2,43 +2,46 @@
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
 </mat-form-field>
 
-<table mat-table class="table-margin-bottom" [dataSource]="dataSource">
-
-    <ng-container *ngFor="let field of modelObject.fields ">
-        <ng-container [matColumnDef]="field.name">
-
-            <th mat-header-cell *matHeaderCellDef>
+<div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="table-margin-bottom" matSort (matSortChange)="dataSource.sortingData($event)">
+        <ng-container *ngFor="let field of modelObject.fields ">
+            <ng-container [matColumnDef]="field.name">
                 <ng-container *ngIf="field.editType =='ACTIONSCOLUMN'">
-                    <button mat-icon-button color="accent" (click)="createNew()"><fa-icon [icon]="faPlus"></fa-icon></button>
+                    <th mat-header-cell *matHeaderCellDef>
+                        <button mat-icon-button color="accent" (click)="createNew()"><fa-icon [icon]="faPlus"></fa-icon></button>
+                    </th>
                 </ng-container>
                 <ng-container *ngIf="field.editType !=='ACTIONSCOLUMN'">
-                    {{field.name}}
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{field.name}}
+                    </th>
                 </ng-container>
-            </th>
 
-            <td mat-cell *matCellDef="let row">
-
-                <credix-input [rowElement]="row" [field]="field" *ngIf="field.editType ==='INPUT'"></credix-input>
-                <credix-select [rowElement]="row" [field]="field" *ngIf="field.editType ==='SELECT'"></credix-select>
-                <credix-display [rowElement]="row" [field]="field" *ngIf="field.editType ==='NONE'"></credix-display>
-                <ng-container *ngIf="field.editType ==='ACTIONSCOLUMN'">
-                    <button *ngIf="!row.editing" mat-icon-button color="primary" focusable="false" (click)="row.startEdit()">
+                <td mat-cell *matCellDef="let row">
+                    <credix-input [rowElement]="row" [field]="field" *ngIf="field.editType ==='INPUT'"> </credix-input>
+                    <credix-select [rowElement]="row" [field]="field" *ngIf="field.editType ==='SELECT'"></credix-select>
+                    <credix-slide [rowElement]="row" [field]="field" *ngIf="field.editType ==='SLIDE'"> </credix-slide>
+                    <credix-display [rowElement]="row" [field]="field" *ngIf="field.editType ==='NONE'"> </credix-display>
+                    <ng-container *ngIf="field.editType ==='ACTIONSCOLUMN'">
+                        <button *ngIf="!row.editing" mat-icon-button color="primary" focusable="false" (click)="row.startEdit()">
                                 <fa-icon [icon]="faPen"  ></fa-icon>
                           </button>
-                    <button *ngIf="row.editing" mat-icon-button color="primary" focusable="false" (click)="row.confirmEditCreate()">
+                        <button *ngIf="row.editing" mat-icon-button color="primary" focusable="false" (click)="row.confirmEditCreate()">
                                 <fa-icon [icon]="faSave"  ></fa-icon>
                           </button>
-                    <button mat-icon-button color="primary" focusable="false" (click)="row.cancelOrDelete()">
+                        <button mat-icon-button color="primary" focusable="false" (click)="row.cancelOrDelete()">
                                 <fa-icon [icon]="faTimes"  ></fa-icon>
                           </button>
-                </ng-container>
-            </td>
+                    </ng-container>
+                </td>
+            </ng-container>
         </ng-container>
-    </ng-container>
 
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr [@EnterLeave]="'flyIn'" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!-- [@EnterLeave]="'flyIn'"-->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-</table>
-<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

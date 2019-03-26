@@ -3,7 +3,7 @@ import { TableElementFactory } from './table-element.factory';
 import { ValidatorService } from '../service/validator.service';
 import { TableElement } from './table-element';
 import { DefaultValidatorService } from '../service/default-validator-service.service';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, Sort } from '@angular/material';
 
 export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
 
@@ -319,6 +319,41 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
     return this.rowsSubject.asObservable();
   }*/
 
-  
+  /**permite ordenar la data */
+  sortingData(sort: Sort) {
+    const data = this.data;
+    if (!sort.active || sort.direction === '') {
+      return;
+    }
+        
+    this.data =   data.sort((a, b) => {
+      let propertyA: number | string = '';
+      let propertyB: number | string = '';
 
+      Object.keys(a.currentData).forEach(key => {
+        
+        if (sort.active === key) {
+          if ( typeof a.currentData[key] ==='object' ){
+            //mapeo a la descripcion de los select ya que recibo un objeto
+            [propertyA, propertyB] = [a.currentData[key]['description'], b.currentData[key]['description']];       
+          } else {
+            [propertyA, propertyB] = [a.currentData[key], b.currentData[key]];
+          }
+          
+        }
+      });
+
+        const isAsc = sort.direction === 'asc';
+        return this.compare(propertyA , propertyB, isAsc);
+        });
+  
+     this._updateChangeSubscription();
+  }
+  
+  
+private compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
+}
+
+
