@@ -1,3 +1,4 @@
 <mat-form-field floatLabel="{{ rowElement.editing ? 'float' : 'never'}}">
     <input matInput [name]="field.name" [formControl]="rowElement.validator.controls[field.name]" [readonly]="!rowElement.editing" placeholder="field.name" autocomplete="nope">
 </mat-form-field>
+<credix-print-error [control]="getFormcontrol()" [field]="field"></credix-print-error>

@@ -26,7 +26,7 @@
                         <button *ngIf="!row.editing" mat-icon-button color="primary" focusable="false" (click)="row.startEdit()">
                                 <fa-icon [icon]="faPen"  ></fa-icon>
                           </button>
-                        <button *ngIf="row.editing" mat-icon-button color="primary" focusable="false" (click)="row.confirmEditCreate()">
+                        <button *ngIf="row.editing" mat-icon-button color="primary" focusable="false" (click)="confirmEditCreate(row)">
                                 <fa-icon [icon]="faSave"  ></fa-icon>
                           </button>
                         <button mat-icon-button color="primary" focusable="false" (click)="row.cancelOrDelete()">

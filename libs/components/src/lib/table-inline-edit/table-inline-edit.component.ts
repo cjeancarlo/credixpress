@@ -113,9 +113,17 @@ createNew() {
     return this.modelObject.fields.map(item => item[tipo]);
   }
 
-  openSnackBar() {
+ 
+  confirmEditCreate(row: TableElement<any> ){
+     if (!row.confirmEditCreate()) {
+      this.openSnackBar( row.errorsArray ); 
+     };
+  }
+  
+  private openSnackBar(data:any) {
     this.snackBar.openFromComponent(MessageComponent, {
-      data: 'nulo'
+      data: data,
+      duration: 3000,
     });
   }
 }

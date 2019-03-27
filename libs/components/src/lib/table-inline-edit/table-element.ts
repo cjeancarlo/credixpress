@@ -2,6 +2,7 @@ import { FormGroup } from '@angular/forms';
 import cloneDeep from 'lodash.clonedeep';
 
 import { TableDataSource } from './table-data-source';
+import { ShowMsgErrorsObj } from '../models/message.model';
 
 export abstract class TableElement<T> {
   id: number;
@@ -9,6 +10,7 @@ export abstract class TableElement<T> {
   currentData: T;
   originalData?: T;
   source: TableDataSource<T>;
+  errorsArray: ShowMsgErrorsObj[] = [];
 
   abstract get validator(): FormGroup;
   abstract set validator(validator: FormGroup);

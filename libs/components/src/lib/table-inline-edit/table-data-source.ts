@@ -29,8 +29,6 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
   {
     super();
     
-    
-    console.log(validatorService);
     if (!validatorService)
       this.validatorService = new DefaultValidatorService();
 
@@ -84,6 +82,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
         currentData: this.createNewObject(),
         source: this,
         validator: this.validatorService.getRowValidator(),
+        errorsArray:  []
       });
 
       if (this.config.prependNewElements) {
@@ -106,9 +105,9 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    */
   confirmCreate(row: TableElement<T>): boolean {
     if (!row.isValid()) {
-      return false
+      this.fillErrors(row);
+      return false;
     }
-
     const source = this.rowsSubject.getValue();
     row.id = source.length - 1;
     this.rowsSubject.next(source);
@@ -118,6 +117,15 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
     return true;
   }
 
+/**llena un arreglo con los posibles errores arrojados por el  validator.controls */
+  private fillErrors(row: TableElement<T>){
+    row.errorsArray = [];
+    Object.keys(row.validator.controls).forEach(key => {
+      if (row.validator.get(key).errors ){
+         row.errorsArray.push({key:key , errors:row.validator.get(key).errors});
+        }
+    });
+  }
   /**
    * Confirm edition of the row. Save changes and disable editing.
    * If validation active and row data is invalid, it doesn't confirm editing neither disable editing.
@@ -125,9 +133,8 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    */
   confirmEdit(row: TableElement<T>): boolean {
     if (!row.isValid()) {
+      this.fillErrors(row);
       return false;
-    } else {
-      console.log(row.validator.errors);
     }
 
     const source = this.rowsSubject.getValue();
