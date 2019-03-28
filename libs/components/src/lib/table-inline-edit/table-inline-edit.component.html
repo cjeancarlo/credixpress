@@ -1,5 +1,5 @@
 <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    <input name="filterInput" [formControl]="filterInput" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar registros">
 </mat-form-field>
 
 <div class="mat-elevation-z8">
@@ -29,7 +29,7 @@
                         <button *ngIf="row.editing" mat-icon-button color="primary" focusable="false" (click)="confirmEditCreate(row)">
                                 <fa-icon [icon]="faSave"  ></fa-icon>
                           </button>
-                        <button mat-icon-button color="primary" focusable="false" (click)="row.cancelOrDelete()">
+                        <button mat-icon-button color="primary" focusable="false" (click)="openDialog(row)">
                                 <fa-icon [icon]="faTimes"  ></fa-icon>
                           </button>
                     </ng-container>

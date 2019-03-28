@@ -10,13 +10,14 @@ import { DisplayComponent } from './display/display.component';
 import { SlideComponent } from './slide/slide.component';
 import { MessageComponent } from './message/message.component';
 import { PrintErrorComponent } from './print-error/print-error.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 
 
 @NgModule({
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
-  declarations: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent],
-  exports: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent],
-  entryComponents: [MessageComponent]
+  declarations: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent],
+  exports: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent],
+  entryComponents: [MessageComponent, DialogComponent]
 })
 export class ComponentsModule {}

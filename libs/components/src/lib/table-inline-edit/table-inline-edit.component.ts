@@ -3,7 +3,7 @@ import { Component, OnInit,  ViewChild, AfterViewInit } from '@angular/core';
 import { TableElementDataService } from './table-element-data.service';
 import { TableElement } from './table-element';
 import { TableDataSource } from './table-data-source';
-import { MatPaginator, MatSort, Sort } from '@angular/material';
+import { MatPaginator, MatSort,  MatDialog } from '@angular/material';
 import {MatSnackBar} from '@angular/material';
 
 import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,8 @@ import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icon
 import { SelectionModel } from '@angular/cdk/collections';
 import {  EnterLeave } from './table-inline.animations';
 import { MessageComponent } from '../message/message.component';
+import { FormControl } from '@angular/forms';
+import { DialogComponent } from '../dialog/dialog.component';
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
@@ -20,6 +22,7 @@ import { MessageComponent } from '../message/message.component';
 })
 export class TableInlineEditComponent implements OnInit, AfterViewInit {
   
+  filterInput: FormControl = new FormControl;
   selection = new SelectionModel<TableElement<any>>(true, []);
   sortedData: any[];
   displayedColumns = [];
@@ -36,7 +39,8 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor( private tableElementDataService:TableElementDataService,
-               private snackBar: MatSnackBar) { 
+               private snackBar: MatSnackBar,
+               public dialog: MatDialog) { 
     this.dataSource = this.tableElementDataService.dataSource;
     this.modelObject= this.tableElementDataService.modelObject;
   }
@@ -97,6 +101,9 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
  arreglo de registro mostrndo en la pantalla 
 */
 createNew() {
+    this.filterInput.setValue(null);
+    this.applyFilter('')
+    
     const pos = this.paginator.pageIndex * this.paginator.pageSize;
     this.dataSource.createNew(pos);
   }
@@ -126,4 +133,29 @@ createNew() {
       duration: 3000,
     });
   }
+
+  openDialog(row: TableElement<any>) {
+    if (row.editing)
+        {row.cancelOrDelete();
+        return; }
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+             currentData: row.currentData, 
+             deleteInfo: this.modelObject.deleteInfo
+            }
+      
+    });
+    
+    
+      dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        row.cancelOrDelete();
+        this.snackBar.openFromComponent(MessageComponent, {
+          data: 'registro Eliminado',
+          duration: 3000,
+        });
+      }
+    });
+  }
+
 }

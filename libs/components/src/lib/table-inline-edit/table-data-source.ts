@@ -95,7 +95,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
         this.data = source;
         this._updateChangeSubscription();
       }
-    }
+    } 
   }
 
   /**

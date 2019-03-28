@@ -1,8 +1,11 @@
 import { OptionsItems } from './options.model';
-
+import { Injectable } from '@angular/core';
+@Injectable({
+  providedIn: 'root'
+})
 export class GetData {
 
-    protected getDataForSelect(): OptionsItems[] {
+    getDataForSelect(): OptionsItems[] {
         return [{
           id: 1, parentId: null, description: 'Venezuela', category: 'countries'
         }, {

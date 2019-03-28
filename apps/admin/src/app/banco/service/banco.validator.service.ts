@@ -12,7 +12,11 @@ export class BancoValidatorService implements ValidatorService {
   }
 
   public BancoObject = {
-    fields: [
+    deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
+      question: '¿ Seguro desea eliminar ?',
+      infoField: 'nombre'
+    },
+    fields: [/**modelo que representa al BANCO */
       { 
         name: 'codigo', type: 'number', search: true, editType: 'NONE', 
         validators: [Validators.required ] 

@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
 import { OptionsItems } from './options.model';
-import { GetData } from './data.class';
+import { GetData } from './data.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UbicacionService  extends GetData {
+export class UbicacionService  {
+
+  constructor(private getdata: GetData){
+
+  }
 
   getCountries(): OptionsItems[] {
-    return this.getDataForSelect().filter(d => d.category === 'countries')
+    
+    return this.getdata.getDataForSelect().filter(d => d.category === 'countries')
   }
   getStates(): OptionsItems[] {
-    return this.getDataForSelect().filter(d => d.category === 'states')
+    return this.getdata.getDataForSelect().filter(d => d.category === 'states')
   }
 
   getCities(): OptionsItems[] {
-    return this.getDataForSelect().filter(d => d.category === 'cities')
+    return this.getdata.getDataForSelect().filter(d => d.category === 'cities')
   }
 }

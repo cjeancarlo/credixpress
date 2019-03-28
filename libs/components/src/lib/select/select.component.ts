@@ -4,7 +4,7 @@ import { Observable , from } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { TableElement } from '../table-inline-edit/table-element';
 import { MatAutocompleteTrigger, MatOptionSelectionChange } from '@angular/material';
-import { UbicacionService } from '@credix/back-end';
+import { GetData } from '@credix/back-end';
 
 @Component({
   selector: 'credix-select',
@@ -20,7 +20,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
   displayField: string;
   filteredOptions: Observable<string[]>;
 
-  constructor(private _ubicacionService: UbicacionService ) { }
+  constructor(private _getdata: GetData ) { }
 
   ngOnInit() {
     this.displayField = this.field.selectConfig.filterField;
@@ -82,7 +82,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
      * asi que se invoca la funcion que buscar el objeto a partir de un ID unico
      */
     if(typeof op === 'number' ||  op === 'string') {
-    const value = this._ubicacionService.getRowfromId(op);
+    const value = this._getdata.getRowfromId(op);
       /** actualiza  del codigo unico el el objeto tipo OptionItems, esto para 
        * permitir hacer busquedas en los campos tipo 'selec' usando el campo OptionItems.description
       */
