@@ -6,6 +6,7 @@ import { ShowMsgErrorsObj } from '../models/message.model';
 
 export abstract class TableElement<T> {
   id: number;
+  primaryKey: string;
   editing: boolean;
   currentData: T;
   originalData?: T;
@@ -22,7 +23,7 @@ export abstract class TableElement<T> {
   confirmEditCreate(): boolean {
     if (this.id === -1)
       return this.source.confirmCreate(this);
-    else
+     else
       return this.source.confirmEdit(this);
   }
 

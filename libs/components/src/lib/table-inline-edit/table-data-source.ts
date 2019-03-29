@@ -122,7 +122,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
     row.errorsArray = [];
     Object.keys(row.validator.controls).forEach(key => {
       if (row.validator.get(key).errors ){
-         row.errorsArray.push({key:key , errors:row.validator.get(key).errors});
+         row.errorsArray.push({type:'error' ,key:key , errors:row.validator.get(key).errors});
         }
     });
   }
@@ -314,6 +314,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
       return new this.dataConstructor();
     } else {
       return this.dataKeys.reduce((obj, key) => {
+        
         obj[key] = undefined;
         return obj;
       }, {});

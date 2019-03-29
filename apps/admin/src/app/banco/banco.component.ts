@@ -32,7 +32,7 @@ export class BancoComponent  {
   constructor(  public  bancoValidator: BancoValidatorService, private tableElementDataService: TableElementDataService  ){
    
     this.tableElementDataService.dataSource  = new TableDataSource<any>(this.bancoList,
-      Banco, this.bancoValidator);  // 
+      Banco,  this.bancoValidator);  // 
 
     this.tableElementDataService.modelObject = this.bancoValidator.BancoObject;
      

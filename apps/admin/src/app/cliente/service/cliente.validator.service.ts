@@ -3,32 +3,42 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidatorService } from '@credix/components';
 import { UbicacionService } from '@credix/back-end';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
-export class BancoValidatorService implements ValidatorService {
+export class ClienteValidatorService implements ValidatorService {
   constructor( private _ubicacionService: UbicacionService){
 
   }
 
-  public BancoObject = {
-    primaryKey: 'codigo',
+  public ClienteObject = {
     deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
       question: '¿ Seguro desea eliminar ?',
       infoField: 'nombre'
     },
+    details:['telefono'],
     fields: [/**modelo que representa al BANCO */
       { 
         name: 'codigo', type: 'number', search: true, editType: 'NONE', 
-        validators: [] 
+        validators: [Validators.required ] 
+      },
+      { 
+        name: 'cedula', type: 'number', search: true, editType: 'INPUT', 
+        validators: [Validators.required] 
       },
       { 
         name: 'nombre', type: 'string', search: true, editType: 'INPUT', 
-        validators: [Validators.required, Validators.minLength(3)] 
+        validators: [Validators.required] 
       },
       { 
-        name: 'principal', type: 'boolean', search: true, editType: 'SLIDE', 
+        name: 'apellido', type: 'string', search: true, editType: 'INPUT', 
         validators: [Validators.required] 
+      },
+      { 
+        name: 'email', type: 'string', search: true, editType: 'INPUT', 
+        validators: [Validators.required, Validators.email] 
       },
       {
         name: 'pais', type: 'number', search: true, editType: 'SELECT', 
@@ -73,7 +83,7 @@ export class BancoValidatorService implements ValidatorService {
 
   private buildformGroup(): FormGroup {
     this.fGroup = new FormGroup({});
-    this.BancoObject.fields.forEach((f) => {
+    this.ClienteObject.fields.forEach((f) => {
       this.fGroup.addControl(f.name, new FormControl('', f.validators));
     })
     return this.fGroup;

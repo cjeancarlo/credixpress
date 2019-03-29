@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { BancoComponent } from './banco.component';
+import { ClienteComponent } from './cliente.component';
 import { Routes, RouterModule } from '@angular/router';
 import { ComponentsModule } from '@credix/components';
 
 export const routes: Routes = [
   {
-    component: BancoComponent,
+    component: ClienteComponent,
     path: ''
   }
 ];
@@ -17,6 +17,8 @@ export const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [ RouterModule],
-  declarations: [BancoComponent]
+  declarations: [ClienteComponent]
 })
-export class BancoModule { }
+export class ClienteModule { }
+
+

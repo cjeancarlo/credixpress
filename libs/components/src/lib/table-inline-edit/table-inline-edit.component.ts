@@ -1,15 +1,15 @@
-import { Component, OnInit,  ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 
 import { TableElementDataService } from './table-element-data.service';
 import { TableElement } from './table-element';
 import { TableDataSource } from './table-data-source';
-import { MatPaginator, MatSort,  MatDialog } from '@angular/material';
-import {MatSnackBar} from '@angular/material';
+import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icons';
 
 import { SelectionModel } from '@angular/cdk/collections';
-import {  EnterLeave } from './table-inline.animations';
+import { EnterLeave } from './table-inline.animations';
 import { MessageComponent } from '../message/message.component';
 import { FormControl } from '@angular/forms';
 import { DialogComponent } from '../dialog/dialog.component';
@@ -17,11 +17,11 @@ import { DialogComponent } from '../dialog/dialog.component';
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
   styleUrls: ['./table-inline-edit.component.scss'],
-  animations: [ EnterLeave ],
+  animations: [EnterLeave],
 
 })
 export class TableInlineEditComponent implements OnInit, AfterViewInit {
-  
+
   filterInput: FormControl = new FormControl;
   selection = new SelectionModel<TableElement<any>>(true, []);
   sortedData: any[];
@@ -32,28 +32,28 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   faTimes = faTimes;
   faSave = faSave;
   modelObject: any;
-  
+
   dataSource: TableDataSource<any>;
-  
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor( private tableElementDataService:TableElementDataService,
-               private snackBar: MatSnackBar,
-               public dialog: MatDialog) { 
+  constructor(private tableElementDataService: TableElementDataService,
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog) {
     this.dataSource = this.tableElementDataService.dataSource;
-    this.modelObject= this.tableElementDataService.modelObject;
+    this.modelObject = this.tableElementDataService.modelObject;
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.displayedColumns = this.getDisplayedColumns();
     this.searchColumns = this.getDisplayedColumns('search');
     this.filterDefinition();
-    
+
     this.dataSource.paginator = this.paginator;
   }
 
-  ngAfterViewInit() {  }
+  ngAfterViewInit() { }
 
   /** metodo define el filtro basado en el Objeto ""ModelObject.columns.search:true"" 
     y crea un arreglo con las columnas habilitadas pára la busqueda*/
@@ -62,12 +62,12 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       let value = '';
       this.searchColumns.forEach(element => {
         if (data.currentData.hasOwnProperty(element)) {
-            value += 
+          value +=
             /**si la data viene de un input SELECT, mapeo del objeto 
              * para obtener la descripcion*/
-            typeof data.currentData[element] === "object" ? 
-            data.currentData[element].description : 
-            data.currentData[element];
+            typeof data.currentData[element] === "object" ?
+              data.currentData[element].description :
+              data.currentData[element];
         }
       }
       )
@@ -97,14 +97,15 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
   }
 
-/**agrega un registro el la primera posicion del 
- arreglo de registro mostrndo en la pantalla 
-*/
-createNew() {
+  /**agrega un registro el la primera posicion del 
+   arreglo de registro mostrndo en la pantalla 
+  */
+  createNew() {
     this.filterInput.setValue(null);
     this.applyFilter('')
-    
+
     const pos = this.paginator.pageIndex * this.paginator.pageSize;
+
     this.dataSource.createNew(pos);
   }
 
@@ -120,14 +121,20 @@ createNew() {
     return this.modelObject.fields.map(item => item[tipo]);
   }
 
- 
-  confirmEditCreate(row: TableElement<any> ){
-     if (!row.confirmEditCreate()) {
-      this.openSnackBar( row.errorsArray ); 
-     };
+
+  confirmEditCreate(row: TableElement<any>) {
+    if (!row.confirmEditCreate()) {
+      this.openSnackBar(row.errorsArray);
+      return
+    };
+
+    this.snackBar.openFromComponent(MessageComponent, {
+      data: [{ type: 'msg', msg: ' Datos Actualizados ' }],
+      duration: 3000,
+    });
   }
-  
-  private openSnackBar(data:any) {
+
+  private openSnackBar(data: any) {
     this.snackBar.openFromComponent(MessageComponent, {
       data: data,
       duration: 3000,
@@ -135,23 +142,23 @@ createNew() {
   }
 
   openDialog(row: TableElement<any>) {
-    if (row.editing)
-        {row.cancelOrDelete();
-        return; }
+    if (row.editing) {
+      row.cancelOrDelete(); return;
+    }
+
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
-             currentData: row.currentData, 
-             deleteInfo: this.modelObject.deleteInfo
-            }
-      
+        currentData: row.currentData,
+        deleteInfo: this.modelObject.deleteInfo
+      }
     });
-    
-    
-      dialogRef.afterClosed().subscribe(result => {
+
+
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
         row.cancelOrDelete();
         this.snackBar.openFromComponent(MessageComponent, {
-          data: 'registro Eliminado',
+          data: [{ type: 'msg', msg: ' registro Eliminado ' }],
           duration: 3000,
         });
       }

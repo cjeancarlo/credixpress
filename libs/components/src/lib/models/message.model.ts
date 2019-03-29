@@ -1,13 +1,15 @@
 import { ValidationErrors } from '@angular/forms';
 
 export interface ShowMsgErrorsObj {
-    key: string,
+    type: "error";
+    key: string;
     errors: ValidationErrors
 }
-
-
 export interface ShowMsg {
-    mensaje: string
+    type: "msg";
+    msg: string
 }
+
+export type typoeOfMessage = ShowMsgErrorsObj | ShowMsg
 
 
