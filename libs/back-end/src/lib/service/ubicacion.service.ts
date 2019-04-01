@@ -11,6 +11,18 @@ export class UbicacionService  {
 
   }
 
+  getCellOperators():OptionsItems[] {
+    return this.getdata.getDataForSelect().filter(d => d.category === 'cellOperator')
+  }
+
+  getNationality(): OptionsItems[] {
+    
+    return this.getdata.getDataForSelect().filter(d => d.category === 'nationality')
+  }
+  getDocumentType(): OptionsItems[] {
+  
+    return this.getdata.getDataForSelect().filter(d => d.category === 'document')
+  }
   getCountries(): OptionsItems[] {
     
     return this.getdata.getDataForSelect().filter(d => d.category === 'countries')

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable , from } from 'rxjs';
+import { Observable  } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { TableElement } from '../table-inline-edit/table-element';
 import { MatAutocompleteTrigger, MatOptionSelectionChange } from '@angular/material';
@@ -26,7 +26,9 @@ export class SelectComponent implements OnInit, AfterViewInit {
     this.displayField = this.field.selectConfig.filterField;
     this.filteredOptions = this.getFormcontrol().valueChanges.pipe(
       startWith(''),
-      map(value => this._filter(value))
+      map(value => {
+      return this._filter(value)
+      })
     );
   }
 
@@ -68,12 +70,13 @@ export class SelectComponent implements OnInit, AfterViewInit {
    * de los inputs del usuario 
    */
   private _filter(value: string): string[] {
+
+    
     const filterField = this.field.selectConfig.filterField;
     if (this.rowElement.editing ) {
-    return this.getOptions().filter((option) =>
-      (''+option[filterField]).toLowerCase().indexOf(value) === 0
-    );
-  }
+      return this.getOptions().filter((option) =>  
+        (''+option[filterField]).toLowerCase().indexOf(value) === 0);
+      }
   }
 
   /**Function that maps an option's control value to its display value in the trigger. */
@@ -120,8 +123,15 @@ export class SelectComponent implements OnInit, AfterViewInit {
   /**metodo que actualiza el observable<string[]> cuando el input tiene el foco, es decir, actualiza
    * la lista e elementos del input cuando recibe el foco
   */
-  updatefilteredOptions(){
-    this.filteredOptions = from([this.getOptions()]);
+  updatefilteredOptions(r: TableElement<any>){
+    this.filteredOptions = 
+    this.getFormcontrol().valueChanges.pipe(
+      startWith(''),
+      map(value => {
+      return this._filter(value)
+      })
+    );
+    /*from([this.getOptions()]);*/
   }
 
 }

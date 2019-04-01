@@ -6,7 +6,36 @@ import { Injectable } from '@angular/core';
 export class GetData {
 
     getDataForSelect(): OptionsItems[] {
-        return [{
+        return [
+          {
+            id: 3005, parentId: null, description: 'Claro', category: 'cellOperator'
+          },
+          {
+            id: 3006, parentId: null, description: 'Tuenti', category: 'cellOperator'
+          },
+          {
+            id: 3007, parentId: null, description: 'Personal', category: 'cellOperator'
+          },
+
+          {
+            id: 2005, parentId: null, description: 'Cedula', category: 'document'
+          },
+          {
+            id: 2006, parentId: null, description: 'Pasaporte', category: 'document'
+          },
+          {
+            id: 2007, parentId: null, description: 'D.N.I.', category: 'document'
+          },
+          {
+            id: 1005, parentId: null, description: 'Venezolano/a', category: 'nationality'
+          },
+          {
+            id: 1006, parentId: null, description: 'Argentino/a', category: 'nationality'
+          },
+          {
+            id: 1007, parentId: null, description: 'Norte Americano/a', category: 'nationality'
+          },
+          {
           id: 1, parentId: null, description: 'Venezuela', category: 'countries'
         }, {
           id: 2, parentId: null, description: 'Argentina', category: 'countries'

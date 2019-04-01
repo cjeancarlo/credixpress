@@ -11,13 +11,14 @@ import { SlideComponent } from './slide/slide.component';
 import { MessageComponent } from './message/message.component';
 import { PrintErrorComponent } from './print-error/print-error.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { TelefonoComponent } from './telefono/telefono.component';
 
 
 
 @NgModule({
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
-  declarations: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent],
-  exports: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent],
-  entryComponents: [MessageComponent, DialogComponent]
+  declarations: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent, TelefonoComponent],
+  exports: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent, TelefonoComponent],
+  entryComponents: [MessageComponent, DialogComponent,TelefonoComponent]
 })
 export class ComponentsModule {}

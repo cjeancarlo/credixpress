@@ -15,18 +15,9 @@ import { TableElementDataService } from '@credix/components';
 export class BancoComponent  {
 
   bancoList = [
-    { nombre: 'jeancarlos cartaya', codigo: 40, principal:true  },
     { nombre: 'Optimus Prime', codigo: 51, pais:1, estado:11, ciudad: 711, principal:true },
     { nombre: 'Megatron', codigo: 50, pais:2, estado: 52, ciudad:552, principal:true  },
     { nombre: 'Peter Parker', codigo: 53, pais:1 },
-    { nombre: 'Bad', codigo: 540, pais:1 },
-    { nombre: 'Bra', codigo: 550 , pais:1},
-    { nombre: 'Brad', codigo: 650 , pais:1},
-    { nombre: 'Bad', codigo: 560 , pais:2},
-    { nombre: 'Ba', codigo: 506 , pais:2},
-    { nombre: 'Bd', codigo: 506 , pais:1},
-    { nombre: 'B', codigo: 503 , pais:1 },
-    { nombre: 'Bad', codigo: 250 , pais:1},
   ];
 
   constructor(  public  bancoValidator: BancoValidatorService, private tableElementDataService: TableElementDataService  ){

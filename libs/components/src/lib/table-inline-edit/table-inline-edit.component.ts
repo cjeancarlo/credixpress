@@ -13,6 +13,7 @@ import { EnterLeave } from './table-inline.animations';
 import { MessageComponent } from '../message/message.component';
 import { FormControl } from '@angular/forms';
 import { DialogComponent } from '../dialog/dialog.component';
+import { ComponentType } from '@angular/core/src/render3';
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
@@ -26,6 +27,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<TableElement<any>>(true, []);
   sortedData: any[];
   displayedColumns = [];
+  disableDetailsButtons = true;
   searchColumns = [];
   faPlus = faPlus;
   faPen = faPen;
@@ -51,6 +53,10 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     this.filterDefinition();
 
     this.dataSource.paginator = this.paginator;
+
+    this.selection.onChange.subscribe(row => {
+      this.disableDetailsButtons = row.source.selected.length===1 ? false : true 
+    })
   }
 
   ngAfterViewInit() { }
@@ -80,23 +86,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all 
-    selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-
-  }
-
+  
   /**agrega un registro el la primera posicion del 
    arreglo de registro mostrndo en la pantalla 
   */
@@ -107,6 +97,14 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     const pos = this.paginator.pageIndex * this.paginator.pageSize;
 
     this.dataSource.createNew(pos);
+  }
+
+  startEditing(row: TableElement<any> ){
+    this.selection.clear();
+    this.selection.toggle(row);
+    this.selection.isSelected(row);
+    row.startEdit();
+
   }
 
   getDisplayedColumns(tipo = 'name'): string[] {
@@ -120,7 +118,16 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
     return this.modelObject.fields.map(item => item[tipo]);
   }
+  getDetalle(component: ComponentType<{}> ){
 
+    const dialogRef = this.dialog.open(component, {
+      data: {
+        parent: this.selection.selected[0].currentData[this.modelObject.primaryKey],
+        row: this.selection.selected[0].currentData
+      }
+    });
+    
+  }
 
   confirmEditCreate(row: TableElement<any>) {
     if (!row.confirmEditCreate()) {
@@ -132,6 +139,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       data: [{ type: 'msg', msg: ' Datos Actualizados ' }],
       duration: 3000,
     });
+    this.selection.clear();
   }
 
   private openSnackBar(data: any) {
@@ -144,16 +152,13 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   openDialog(row: TableElement<any>) {
     if (row.editing) {
       row.cancelOrDelete(); return;
-    }
-
+    } 
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         currentData: row.currentData,
         deleteInfo: this.modelObject.deleteInfo
       }
-    });
-
-
+    }); 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         row.cancelOrDelete();
@@ -164,5 +169,22 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+
+/** Whether the number of selected elements matches the total number of rows. */
+isAllSelected() {
+  const numSelected = this.selection.selected.length;
+  const numRows = this.dataSource.data.length;
+  return numSelected === numRows;
+}
+
+/** Selects all rows if they are not all 
+  selected; otherwise clear selection. */
+masterToggle() {
+  this.isAllSelected() ?
+    this.selection.clear() :
+    this.dataSource.data.forEach(row => this.selection.select(row));
+}
+ 
 
 }
