@@ -1,4 +1,0 @@
-<div class="text-danger" *ngIf="control && control.errors && (control.dirty || control.touched)">
-    <div [hidden]="!control.errors.required">{{ field.name }} is required.</div>
-    <div [hidden]="!control.errors.patternInvalid">{{ field.name }} is invalid.</div>
-</div>

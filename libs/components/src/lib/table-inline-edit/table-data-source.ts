@@ -74,7 +74,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
   createNew(pos = 0 ): void {
     const source = this.rowsSubject.getValue();
 
-    if (!this.existsNewElement(source)) {
+    if (!this.existsElement(source)) {
 
       const newElement = TableElementFactory.createTableElement({
         id: -1,
@@ -122,7 +122,9 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
     row.errorsArray = [];
     Object.keys(row.validator.controls).forEach(key => {
       if (row.validator.get(key).errors ){
-         row.errorsArray.push({type:'error' ,key:key , errors:row.validator.get(key).errors});
+         row.errorsArray.push({type:'error' ,
+         key:key,
+         errors:row.validator.get(key).errors});
         }
     });
   }
@@ -194,12 +196,26 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    * Checks the existance of the a new row (not yet saved).
    * @param source
    */
-  protected existsNewElement(source: TableElement<T>[]): boolean {
+  /*protected existsElement(source: TableElement<T>[]): boolean {
 
     const  exists = source
     .map(function (element) {return element.id;})
     .indexOf(-1);
     
+    return exists !== -1;
+
+  }*/
+
+   /**
+   * Checks the existance of the a row in edit state.
+   * @param source
+   */
+   existsElement( source: TableElement<T>[]): boolean {
+    const  exists = source
+    .map(function (element) {
+      return element.editing;
+    })
+    .indexOf(true);
     return exists !== -1;
 
   }
@@ -238,7 +254,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    */
   protected getIndexFromRowId(id: number, source: TableElement<T>[]): number {
     if(id === -1) {
-      return this.existsNewElement(source) ? this.getNewRowIndex(source) : -1;
+      return this.existsElement(source) ? this.getNewRowIndex(source) : -1;
     } else {
       if (this.config.prependNewElements)
           return source.length - 1 - id;

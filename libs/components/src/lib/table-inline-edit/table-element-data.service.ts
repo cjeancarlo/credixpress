@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TableDataSource } from './table-data-source';
+import { ModelObject } from '../models/object.models';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,6 @@ import { TableDataSource } from './table-data-source';
 export class TableElementDataService {
 
   dataSource: TableDataSource<any>;
-  modelObject: any;
+  modelObject: ModelObject;
   constructor() { }
 }

@@ -2,7 +2,7 @@ import { FormGroup } from '@angular/forms';
 import cloneDeep from 'lodash.clonedeep';
 
 import { TableDataSource } from './table-data-source';
-import { ShowMsgErrorsObj } from '../models/message.model';
+import { typoeOfMessage } from '../models/message.model';
 
 export abstract class TableElement<T> {
   id: number;
@@ -11,7 +11,7 @@ export abstract class TableElement<T> {
   currentData: T;
   originalData?: T;
   source: TableDataSource<T>;
-  errorsArray: ShowMsgErrorsObj[] = [];
+  errorsArray: typoeOfMessage[] = [];
 
   abstract get validator(): FormGroup;
   abstract set validator(validator: FormGroup);
@@ -26,10 +26,20 @@ export abstract class TableElement<T> {
      else
       return this.source.confirmEdit(this);
   }
-
+/**inicia edicion del registro verifica si ya existe un registro en estado de edicion, 
+ * ya que solo se puede editar un registro a la vez sino hace un  'push' a la propiedad 
+ * 'errorsArray' 
+*/
   startEdit(): void {
-    this.originalData = cloneDeep(this.currentData);
-    this.editing = true;
+    if (!this.source.existsElement(this.source.data)){
+      this.originalData = cloneDeep(this.currentData);
+      this.editing = true;
+    } else {
+          this.errorsArray.push({ 
+          type: "msg", 
+          msg: " Finalice la edición del registro Anterior" } 
+          );
+    }
   }
 
   cancelOrDelete() {

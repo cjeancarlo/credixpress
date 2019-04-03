@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ValidatorService } from '@credix/components';
+import { ValidatorService, ModelObject } from '@credix/components';
 import { UbicacionService } from '@credix/back-end';
 
 
@@ -13,12 +13,12 @@ export class ClienteValidatorService implements ValidatorService {
 
   }
 
-  public ClienteObject = {
+  public ClienteObject: ModelObject = {
+    primaryKey: 'codigo',
     deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
       question: '¿ Seguro desea eliminar ?',
       infoField: 'nombre'
     },
-    details:['telefono'],
     fields: [/**modelo que representa al BANCO */
       { 
         name: 'codigo', type: 'number', search: true, editType: 'NONE', 

@@ -14,6 +14,7 @@ import { MessageComponent } from '../message/message.component';
 import { FormControl } from '@angular/forms';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ComponentType } from '@angular/core/src/render3';
+import { ModelObject } from '../models/object.models';
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
@@ -33,7 +34,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   faPen = faPen;
   faTimes = faTimes;
   faSave = faSave;
-  modelObject: any;
+  modelObject: ModelObject;
 
   dataSource: TableDataSource<any>;
 
@@ -41,8 +42,8 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private tableElementDataService: TableElementDataService,
-    private snackBar: MatSnackBar,
-    public dialog: MatDialog) {
+              private snackBar: MatSnackBar,
+              public dialog: MatDialog ) {
     this.dataSource = this.tableElementDataService.dataSource;
     this.modelObject = this.tableElementDataService.modelObject;
   }
@@ -77,7 +78,6 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
         }
       }
       )
-      //console.log(value);
       return (value).trim().toLowerCase().indexOf(filter) !== -1;
     }
   }
@@ -88,7 +88,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   }
   
   /**agrega un registro el la primera posicion del 
-   arreglo de registro mostrndo en la pantalla 
+   arreglo de registro mostrando en la pantalla 
   */
   createNew() {
     this.filterInput.setValue(null);
@@ -100,11 +100,17 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   }
 
   startEditing(row: TableElement<any> ){
-    this.selection.clear();
+    if (row.errorsArray.length !== 0)  {
+        this.openSnackBar(row.errorsArray);
+        row.errorsArray = [];
+      }
+    
+      this.selection.clear();
     this.selection.toggle(row);
     this.selection.isSelected(row);
     row.startEdit();
-
+  
+  
   }
 
   getDisplayedColumns(tipo = 'name'): string[] {

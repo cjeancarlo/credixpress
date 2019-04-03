@@ -3,7 +3,10 @@
 </mat-form-field>
 <div class="button-row">
     <ng-container *ngFor="let d of modelObject.details">
-        <button (click)="getDetalle(d.component)" [disabled]="disableDetailsButtons" mat-raised-button color="accent">{{d.label}}</button>
+        <button (click)="getDetalle(d.component)" 
+        [disabled]="disableDetailsButtons" 
+        mat-raised-button 
+        color="primary">{{d.label}}</button>
     </ng-container>
 </div>
 
@@ -22,7 +25,7 @@
                     </th>
                 </ng-container>
 
-                <td mat-cell *matCellDef="let row">
+                <td mat-cell *matCellDef="let row" [ngClass]="{ 'highlight': row.editing === true }">
                     <mat-checkbox *ngIf="field.editType ==='SELECTBOX'" (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
                     </mat-checkbox>
                     <credix-input [rowElement]="row" [field]="field" *ngIf="field.editType ==='INPUT'"> </credix-input>

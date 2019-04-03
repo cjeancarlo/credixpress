@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidatorService } from '@credix/components';
 import { UbicacionService } from '@credix/back-end';
+import { ModelObject } from '../../models/object.models';
 
 
 
@@ -13,13 +14,13 @@ export class TelefonoValidatorService implements ValidatorService {
 
   }
 
-  public TelefonoObject = {
+  public TelefonoObject: ModelObject = {
     primaryKey: 'codigo_tele',
-    deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
+    deleteInfo: { 
       question: '¿ Seguro desea eliminar ?',
-      infoField: 'nombre'
+      infoField: 'nro_telefono'
     },
-    fields: [/**modelo que representa al Telefono */
+    fields: [
       { name: 'actionsColumn', editType: 'ACTIONSCOLUMN' },
       { name: 'codigo_parent', type: 'number', search: true, editType: 'NONE', label: 'Codigo' },
       { name: 'codigo_tele', type: 'number', search: true, editType: 'NONE', label: 'Codigo' },
@@ -42,7 +43,7 @@ export class TelefonoValidatorService implements ValidatorService {
         validators: [Validators.required] 
       },
       { 
-        name: 'default ', type: 'boolean', search: true, editType: 'SLIDE',  label: 'predeterminado',
+        name: 'default ', type: 'boolean', search: true, editType: 'SLIDE',  label: 'Predeterminado',
         validators: [Validators.required] 
       },
     ]

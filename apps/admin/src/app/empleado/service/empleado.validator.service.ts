@@ -1,33 +1,26 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ValidatorService, TelefonoComponent } from '@credix/components';
+import { ValidatorService, TelefonoComponent, ModelObject } from '@credix/components';
 import { UbicacionService } from '@credix/back-end';
-
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmpleadoValidatorService implements ValidatorService {
-  constructor( private _ubicacionService: UbicacionService){
+  constructor( private _ubicacionService: UbicacionService){ }
 
-  }
-
-  public EmpleadoObject = {
+  public EmpleadoObject: ModelObject = {
     primaryKey: 'codigo_empl',
     deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
       question: '¿ Seguro desea eliminar ?',
       infoField: 'nombre'
     },
-    details:[{component: TelefonoComponent ,label:'Telefono'},
-             {component:'direccion' ,label:'Direccion'},
-             {component:'banco' ,label:'Banco'},],
+    details:[{component: TelefonoComponent, label:'Telefono'}],
     fields: [/**modelo que representa al Empleado */
       { name: 'actionsColumn', editType: 'ACTIONSCOLUMN' },
       //{ name: 'selectbox', editType: 'SELECTBOX' },
       { 
         name: 'codigo_empl', type: 'number', search: true, editType: 'NONE', label: 'Codigo'
-
       },
       {
         name: 'codigo_naci', type: 'number', search: true, editType: 'SELECT',  label: 'Nacionalidad',
