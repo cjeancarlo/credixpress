@@ -46,19 +46,18 @@ export class TelefonoComponent implements OnInit, OnDestroy {
   public  telefonoValidator: TelefonoValidatorService, 
   private tableElementDataService: TableElementDataService
   ) { 
-    const TelefonosFiltrados = 
-    this.TelefonoList.filter(tels =>  
-      tels.codigo_parent === this.data['parent'] 
-    );
+    const TelefonosFiltrados =  this.TelefonoList.filter(tels =>   tels.codigo_parent === this.data['parent'] );
 
     this.tableElementDataService.dataSource = new TableDataSource<any>(TelefonosFiltrados, Telefono,  this.telefonoValidator);   
     /**guarda temporalmente el modelObject del padre  */;
     this.ParentmodelObject  = this.tableElementDataService.modelObject;
-   
     this.tableElementDataService.modelObject = this.telefonoValidator.TelefonoObject;
    }
 
-  ngOnInit() { }
+  ngOnInit() { 
+console.log(this.data['row']);
+
+  }
 
   /** Called once, before the instance is destroyed.
   * Add 'implements OnDestroy' to the class.

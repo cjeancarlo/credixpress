@@ -1,6 +1,6 @@
 import { ValidatorFn } from '@angular/forms';
 import { OptionsItems } from '@credix/back-end';
-import { Component } from '@angular/compiler/src/core';
+
 
 /**tipo de onbjeto que se va a usar para la edicion del campo */
 export type EditType = 'NONE' | 'INPUT' | 'SLIDE' | 'SELECT' | 'ACTIONSCOLUMN';

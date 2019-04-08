@@ -1,0 +1,18 @@
+<p>
+  options works!
+</p>
+<mat-form-field class="example-full-width" >
+  <input [name]="field.name" 
+  type="text" 
+  [placeholder]="field.label" 
+  aria-label="Number" 
+  matInput [formControl]="inputControl" 
+  [matAutocomplete]="auto" autocomplete="nope" >
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" >
+      <mat-option *ngFor="let state of filteredOptions | async" [value]="state.name">
+          <img class="example-option-img" aria-hidden [src]="state.flag" height="25">
+          <span>{{state.name}}</span> |
+          <small>Population: {{state.population}}</small>
+        </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

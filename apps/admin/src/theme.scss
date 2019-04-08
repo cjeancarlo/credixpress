@@ -123,6 +123,12 @@ $accent: map-get($credixpress-app-theme, accent );
     height:  calc(100% + 100px);
 }
 
+.header-info {
+    background-color: mat-color($mat-grey,100);
+    padding: 8px 20px;
+    border-radius: 4px;
+}
+
 // //generate class for flex columns  
 @for $i from 1 through 8 {
     .flex-grow-#{$i} {

@@ -1,33 +1,36 @@
 {
-    "npmScope": "credix",
-    "implicitDependencies": {
-        "angular.json": "*",
-        "package.json": "*",
-        "tsconfig.json": "*",
-        "tslint.json": "*",
-        "nx.json": "*"
+  "npmScope": "credix",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "admin": {
+      "tags": []
     },
-    "projects": {
-        "admin": {
-            "tags": []
-        },
-        "admin-e2e": {
-            "tags": []
-        },
-        "client": {
-            "tags": []
-        },
-        "client-e2e": {
-            "tags": []
-        },
-        "components": {
-            "tags": []
-        },
-        "material": {
-            "tags": []
-        },
-        "back-end": {
-            "tags": []
-        }
+    "admin-e2e": {
+      "tags": []
+    },
+    "client": {
+      "tags": []
+    },
+    "client-e2e": {
+      "tags": []
+    },
+    "components": {
+      "tags": []
+    },
+    "material": {
+      "tags": []
+    },
+    "back-end": {
+      "tags": []
+    },
+    "api": {
+      "tags": []
     }
+  }
 }

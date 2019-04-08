@@ -103,6 +103,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     if (row.errorsArray.length !== 0)  {
         this.openSnackBar(row.errorsArray);
         row.errorsArray = [];
+        return
       }
     
       this.selection.clear();

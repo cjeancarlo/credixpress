@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'empleado',
     loadChildren: './empleado/empleado.module#EmpleadoModule'
+  },
+  {
+    path: 'descriptivas',
+    loadChildren: './options/options.module#OptionsModule'
   }
 ];
 
