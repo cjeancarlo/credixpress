@@ -24,15 +24,15 @@ export class SelectComponent implements OnInit, AfterViewInit {
   constructor(private _getdata: GetData ) { }
 
   ngOnInit() {
-    console.log(this.displayField);
+    this.displayField = this.field.selectConfig.filterField;
 
     this.field.selectConfig.optionSource
-    .subscribe( op => this.filteredOptions =  this.allOptions  =op)
+    .subscribe( op => this.allOptions  =op)
   }
 
   ngAfterViewInit() {
     this.getFormcontrol().valueChanges.subscribe(value => {
-      this.filteredOptions =  value ?  this._filter(value)  :  this.allOptions
+      this.filteredOptions =  value ?  this._filter(value)  :  this.getOptions()
   })
 
     this.forceSelection();
@@ -59,7 +59,9 @@ export class SelectComponent implements OnInit, AfterViewInit {
   /**limpia al hijo cuando el input paretn cambia de valor para mantener 
    * la integridad de la cascada de datos */
   onEnter(evt: MatOptionSelectionChange ){
+
     const childKey = this.field.selectConfig.childKey;
+
     if ( this.field.selectConfig.childKey !== null){
     if (this.getFormcontrol(childKey).value &&
          evt.source.value.id !== this.getFormcontrol(childKey).value.parentId ){
@@ -71,7 +73,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
   /**retorna elementos filtrados del arreglo de items seleccionables, dependiendo 
    * de los inputs del usuario 
    */
-  private _filter(value: string): string[] {
+  private _filter(value: string): any[] {
     const filterField = this.field.selectConfig.filterField;
     if (this.rowElement.editing ) {
       return this.getOptions().filter((option) =>  
@@ -103,7 +105,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
   /** retorna el arreglo de elmentos seleccionables, en el caso que 
    * los elementos tengan depencia valida y filtra los elementos a mostrar
   */
-  private getOptions(): string[] {
+  private getOptions(): any[] {
     
     const parentKey = this.field.selectConfig.parentKey;
     let parentValue = '';
@@ -115,10 +117,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
 
       const filteredArray =  this.allOptions.filter(
         (option: any) => 
-            { console.log(option['parentId'] ,option)
-              return option['parentId'] ===  (typeof parentValue === 'object' ? parentValue['id'] : parentValue) 
-            }
-
+             option['parentId'] ===  (typeof parentValue === 'object' ? parentValue['id'] : parentValue) 
         );
         return filteredArray;
     }
@@ -129,14 +128,11 @@ export class SelectComponent implements OnInit, AfterViewInit {
    * la lista e elementos del input cuando recibe el foco
   */
   updatefilteredOptions(r: TableElement<any>){
-    this.filteredOptions = this.allOptions
-    /*this.getFormcontrol().valueChanges.pipe(
-      startWith(''),
-      map(value => {
-      return this._filter(value)
-      })
-    );
-    /*from([this.getOptions()]);*/
+    this.filteredOptions = this.getOptions();
   }
+
+
+  
+
 
 }

@@ -10,6 +10,9 @@ var optionList = require('../controller/appController');
   
   app.route('/listOptionById/:Id')
   .get(optionList.getlistOptionById);
+
+  app.route('/listOptionByCategory/:categoryId')
+  .get(optionList.getlistOptionByCategory );
 };
 
  /*app.route('/listOptionByParent/:parentId')

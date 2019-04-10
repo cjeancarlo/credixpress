@@ -8,9 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class UbicacionService  {
 
-  constructor(private getdata: GetData){
-
-  }
+  constructor(private getdata: GetData){ }
 
  
 
@@ -35,11 +33,11 @@ export class UbicacionService  {
   
   /** Get states  list of OptionsItems*/
   getStates():  Observable<OptionsItems[]> {
-    return this.getdata.getList(5);
+    return this.getdata.getByCategoryId(5);
   }
 
   /** Get cities  list of OptionsItems*/
   getCities():  Observable<OptionsItems[]> {
-    return this.getdata.getList(6);
+    return this.getdata.getByCategoryId(6);
   }
 }

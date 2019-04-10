@@ -58,6 +58,14 @@ insert into list_options (parentId, description) values (17,'Aragua');
 insert into list_options (parentId, description) values (18,'CABA');
 insert into list_options (parentId, description) values (18,'STA FE');
 
-     {  id: 1, parentId: null, description: 'Venezuela', category: 'countries' }, 
-  //     { id: 2, parentId: null, description: 'Argentina', category: 'countries' }, 
+
+
+insert into list_options (parentId, description, category) values (17,'Miranda');
+insert into list_options (parentId, description) values (17,'Distrito Capital');
+insert into list_options (parentId, description) values (17,'Carabobo');
+insert into list_options (parentId, description) values (17,'Zulia');
+insert into list_options (parentId, description) values (17,'Aragua');
+
   
+ALTER TABLE `list_options` ADD `categoryId` int(11)  AFTER parentId
+ALTER TABLE `list_options`  CHANGE category categoryId int(11);
