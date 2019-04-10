@@ -58,7 +58,7 @@ export class BancoValidatorService implements ValidatorService {
        validators: [Validators.required],
         selectConfig: { 
           filterField: 'description',
-          optionSource: this._ubicacionService.getCities() , 
+          optionSource: this._ubicacionService.getCities(),
           parentKey: 'estado' ,
           childKey: null
         }

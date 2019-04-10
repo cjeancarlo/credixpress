@@ -7,6 +7,7 @@ import { UbicacionService } from '@credix/back-end';
   providedIn: 'root'
 })
 export class OptionsValidatorService implements ValidatorService {
+
   constructor( private _ubicacionService: UbicacionService){ }
 
   public OptionsObject: ModelObject = {
@@ -21,7 +22,7 @@ export class OptionsValidatorService implements ValidatorService {
         validators: [Validators.required],
         selectConfig: { 
           filterField: 'description',
-          optionSource: this._ubicacionService.getNationality(),
+          optionSource: this._ubicacionService.getCellOperators() ,
           parentKey: null, 
           childKey: null
         }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OptionsItems } from './options.model';
 import { GetData } from './data.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,27 +12,34 @@ export class UbicacionService  {
 
   }
 
-  getCellOperators():OptionsItems[] {
-    return this.getdata.getDataForSelect().filter(d => d.category === 'cellOperator')
+ 
+
+  /** Get cell operators list of OptionsItems*/
+  getCellOperators(): Observable<OptionsItems[]> {
+    return this.getdata.getList(1);
   }
 
-  getNationality(): OptionsItems[] {
-    
-    return this.getdata.getDataForSelect().filter(d => d.category === 'nationality')
+  /** Get Nacionalities list of OptionsItems*/
+  getNationality():  Observable<OptionsItems[]> {
+    return this.getdata.getList(3);
   }
-  getDocumentType(): OptionsItems[] {
+
+  /** Get Document  list of OptionsItems*/
+  getDocumentType():  Observable<OptionsItems[]> {
+    return this.getdata.getList(2);
+  }
+  /** Get countries  list of OptionsItems*/
+  getCountries():  Observable<OptionsItems[]> {
+    return this.getdata.getList(4);
+  }
   
-    return this.getdata.getDataForSelect().filter(d => d.category === 'document')
-  }
-  getCountries(): OptionsItems[] {
-    
-    return this.getdata.getDataForSelect().filter(d => d.category === 'countries')
-  }
-  getStates(): OptionsItems[] {
-    return this.getdata.getDataForSelect().filter(d => d.category === 'states')
+  /** Get states  list of OptionsItems*/
+  getStates():  Observable<OptionsItems[]> {
+    return this.getdata.getList(5);
   }
 
-  getCities(): OptionsItems[] {
-    return this.getdata.getDataForSelect().filter(d => d.category === 'cities')
+  /** Get cities  list of OptionsItems*/
+  getCities():  Observable<OptionsItems[]> {
+    return this.getdata.getList(6);
   }
 }

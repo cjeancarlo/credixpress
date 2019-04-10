@@ -1,5 +1,7 @@
 import { ValidatorFn } from '@angular/forms';
 import { OptionsItems } from '@credix/back-end';
+import { Observable } from 'rxjs';
+
 
 
 /**tipo de onbjeto que se va a usar para la edicion del campo */
@@ -28,8 +30,8 @@ export interface FieldType {
     selectConfig?:{
     /**nombre del campo que va a usar la funciton de filtrado o busqueda */
         filterField: string,
-    /** array de elementos de SELECT */
-        optionSource: OptionsItems[],
+    /** nombre de la funcion  */
+        optionSource: Observable<any>
         /**si el SELECT tiene dependencia se coloca el nombre del campo padre
         * ejemplo pais => estado => ciudad, si, soy pais mi parentKey es null
         * y mi childKey es estado

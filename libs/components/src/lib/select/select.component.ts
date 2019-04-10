@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable  } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
 import { TableElement } from '../table-inline-edit/table-element';
 import { MatAutocompleteTrigger, MatOptionSelectionChange } from '@angular/material';
 import { GetData } from '@credix/back-end';
+import { FieldType } from '../models/object.models';
 
 @Component({
   selector: 'credix-select',
@@ -14,25 +13,28 @@ import { GetData } from '@credix/back-end';
 export class SelectComponent implements OnInit, AfterViewInit {
 
   @Input() rowElement: TableElement<any>;
-  @Input() field: any;
+  @Input() field: FieldType;
   @ViewChild(MatAutocompleteTrigger) trigger: MatAutocompleteTrigger;
 
   displayField: string;
-  filteredOptions: Observable<string[]>;
+  filteredOptions: any[];
+  allOptions: any[];
+  
 
   constructor(private _getdata: GetData ) { }
 
   ngOnInit() {
-    this.displayField = this.field.selectConfig.filterField;
-    this.filteredOptions = this.getFormcontrol().valueChanges.pipe(
-      startWith(''),
-      map(value => {
-      return this._filter(value)
-      })
-    );
+    console.log(this.displayField);
+
+    this.field.selectConfig.optionSource
+    .subscribe( op => this.filteredOptions =  this.allOptions  =op)
   }
 
   ngAfterViewInit() {
+    this.getFormcontrol().valueChanges.subscribe(value => {
+      this.filteredOptions =  value ?  this._filter(value)  :  this.allOptions
+  })
+
     this.forceSelection();
   }
 
@@ -70,8 +72,6 @@ export class SelectComponent implements OnInit, AfterViewInit {
    * de los inputs del usuario 
    */
   private _filter(value: string): string[] {
-
-    
     const filterField = this.field.selectConfig.filterField;
     if (this.rowElement.editing ) {
       return this.getOptions().filter((option) =>  
@@ -90,7 +90,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
        * permitir hacer busquedas en los campos tipo 'selec' usando el campo OptionItems.description
       */
       this.getFormcontrol().setValue(value);
-      return value[this.displayField];
+      return  value && value[this.displayField] ? value[this.displayField] : undefined;
     }
     return op && op[this.displayField] ? op[this.displayField] : undefined;
   }
@@ -104,6 +104,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
    * los elementos tengan depencia valida y filtra los elementos a mostrar
   */
   private getOptions(): string[] {
+    
     const parentKey = this.field.selectConfig.parentKey;
     let parentValue = '';
     if (parentKey !== null) {
@@ -111,21 +112,25 @@ export class SelectComponent implements OnInit, AfterViewInit {
         return [];
       }
       parentValue = this.getFormcontrol(parentKey).value;
-      const filteredArray =  this.field.selectConfig.optionSource.filter(
+
+      const filteredArray =  this.allOptions.filter(
         (option: any) => 
-          (option['parentId'] ===  (typeof parentValue === 'object' ? parentValue['id'] : parentValue))  
+            { console.log(option['parentId'] ,option)
+              return option['parentId'] ===  (typeof parentValue === 'object' ? parentValue['id'] : parentValue) 
+            }
+
         );
         return filteredArray;
     }
-    return this.field.selectConfig.optionSource || [];
+    return this.allOptions   || [];
   }
 
   /**metodo que actualiza el observable<string[]> cuando el input tiene el foco, es decir, actualiza
    * la lista e elementos del input cuando recibe el foco
   */
   updatefilteredOptions(r: TableElement<any>){
-    this.filteredOptions = 
-    this.getFormcontrol().valueChanges.pipe(
+    this.filteredOptions = this.allOptions
+    /*this.getFormcontrol().valueChanges.pipe(
       startWith(''),
       map(value => {
       return this._filter(value)

@@ -37,3 +37,27 @@ insert into list_options (parentId, description) values (1,'Perosnal');
 insert into list_options (parentId, description) values (2,'Cedula');
 insert into list_options (parentId, description) values (2,'Pasaporte');
 insert into list_options (parentId, description) values (2,'D.N.I.');
+
+
+insert into list_options (parentId, description) values (3,'Venezolano');
+insert into list_options (parentId, description) values (3,'Argentino');
+insert into list_options (parentId, description) values (3,'Norte Americano');
+insert into list_options (parentId, description) values (3,'Canadiense');
+
+insert into list_options (parentId, description) values (4,'Venezuela');
+insert into list_options (parentId, description) values (4,'Argentina');
+
+
+insert into list_options (parentId, description) values (17,'Miranda');
+insert into list_options (parentId, description) values (17,'Distrito Capital');
+insert into list_options (parentId, description) values (17,'Carabobo');
+insert into list_options (parentId, description) values (17,'Zulia');
+insert into list_options (parentId, description) values (17,'Aragua');
+
+
+insert into list_options (parentId, description) values (18,'CABA');
+insert into list_options (parentId, description) values (18,'STA FE');
+
+     {  id: 1, parentId: null, description: 'Venezuela', category: 'countries' }, 
+  //     { id: 2, parentId: null, description: 'Argentina', category: 'countries' }, 
+  

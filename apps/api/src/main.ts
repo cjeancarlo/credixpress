@@ -1,6 +1,7 @@
 const express = require('express'),
 db = require('./app/database/connect'),
 app = express(),
+cors = require('cors'),
   bodyParser = require('body-parser'),
   port = process.env.PORT || 3000;
 
@@ -11,6 +12,7 @@ app.listen(port);
 
 console.log('API server started on: ' + port);
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
