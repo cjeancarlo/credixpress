@@ -2,7 +2,7 @@
 var listOptions  = require('../model/appModel');
 
 exports.getlistOptionByCategory = function(req, res) {
-  listOptions.listOptionByCategory(req.params.categoryId, function(err, result) {
+  listOptions.listOptionByCategory(req.body.categoryId, function(err, result) {
       if (err){
         res.send(err);
       }
@@ -11,20 +11,20 @@ exports.getlistOptionByCategory = function(req, res) {
 };
 
 exports.getlistOptionByParent = function(req, res) {
-  listOptions.listOptionByParent(req.params.parentId, function(err, result) {
-      if (err){
-        res.send(err);
-      }
-      res.json(result);
-    });
+  listOptions.listOptionByParent(req.body.parentId, function(err, result) {
+      if (err) {
+          res.send(err);
+        }
+        res.send(result);
+      });
 };
 
   exports.getlistOptionById = function(req, res) {
-    listOptions.listOptionById(req.params.Id, function(err, result) {
+    listOptions.listOptionById(req.body.Id, function(err, result) {
         if (err) {
           res.send(err);
         }
-        res.json(result);
+        res.send(result);
       });
     };
   

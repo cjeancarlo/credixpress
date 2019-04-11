@@ -1,7 +1,7 @@
 import { OptionsItems } from './options.model';
 import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { retry, catchError, map } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 @Injectable({
@@ -12,11 +12,11 @@ export class GetData {
     // Define API
     apiURL = 'http://localhost:3000';
        // Http Options
-   httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  }  
+  httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json'
+        })
+      };
 
     constructor(private http: HttpClient) { }
 
@@ -25,47 +25,52 @@ export class GetData {
   */
  
  
-  getList(parentID: number): Observable<OptionsItems[]> {
-  return this.getByParentId(parentID);
-}
-
   /*========================================
     CRUD Methods for consuming RESTful API
   =========================================*/
   // HttpClient API get() method => Fetch list_options 
   getByParentId(parentId: number): Observable<OptionsItems[]> {
-    return this.http.get<OptionsItems[]>(this.apiURL + '/listOptionByParent/' + parentId)
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    )
+      const parameters =  {'parentId': parentId}; 
+      return this.serverPostRequest('/listOptionByParent/',parameters );
   }  
 
   getByCategoryId(categoryId: number): Observable<OptionsItems[]> {
-    return this.http.get<OptionsItems[]>(this.apiURL + '/listOptionByCategory/' + categoryId)
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    )
+    const parameters =  {'categoryId': categoryId};
+    return this.serverPostRequest('/listOptionByCategory/',parameters );
   }  
 
+
+  
   // HttpClient API get() method => Fetch list_options 
-  getRow(id: number): Observable<OptionsItems> {
-    return this.http.get<OptionsItems>(this.apiURL + '/listOptionById/' + id)
-    .pipe(
-      retry(1),
-      catchError(this.handleError)
-    )
+  getRow(Id: number): Observable<OptionsItems> {
+    const parameters = {'Id': Id};
+    return this.serverPostRequest('/listOptionById/',parameters );
   }  
 
- getRowfromId(id: number): OptionsItems {
+  
+  getList(parentID: number): Observable<OptionsItems[]> {
+    return this.getByParentId(parentID);
+  }
+
+  getRowfromId(id: number): OptionsItems {
     let _optionsItems: OptionsItems; 
     this.getRow(id).subscribe(optionsItems => {
       _optionsItems = optionsItems;
      });
      return _optionsItems;
-
   }
+  
+private serverPostRequest(url: string, params ) : Observable<any[] | any> {
+  return this.http.post<OptionsItems[]>(this.apiURL + url,
+    JSON.stringify(params),
+    this.httpOptions
+  )
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  } 
+
    // Error handling 
    handleError(error) {
     let errorMessage = '';
@@ -76,8 +81,8 @@ export class GetData {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-    console.log(error);
-    window.alert(errorMessage);
+    
+    console.log(errorMessage);
     return throwError(errorMessage);
  }
 

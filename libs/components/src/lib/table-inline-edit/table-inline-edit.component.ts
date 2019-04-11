@@ -100,15 +100,16 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   }
 
   startEditing(row: TableElement<any> ){
-    if (row.errorsArray.length !== 0)  {
-        this.openSnackBar(row.errorsArray);
-        row.errorsArray = [];
-        return
-      }
-    
+
+    if (this.selection.selected.length ===1 && row.id !== this.selection.selected[0].id){
+      this.openSnackBar([{ type: 'msg', msg: ' No puedo completar la operación, finalice la edicion del registor anterior ' }]);
+      return 
+    }
       this.selection.clear();
-    this.selection.toggle(row);
-    this.selection.isSelected(row);
+      this.selection.toggle(row);
+      this.selection.isSelected(row);
+    
+    
     row.startEdit();
   
   
@@ -137,6 +138,11 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   }
 
   confirmEditCreate(row: TableElement<any>) {
+    if (this.selection.selected.length ===1 && row.id !== this.selection.selected[0].id){
+      this.openSnackBar([{ type: 'msg', msg: ' No puedo completar la operación, finalice la edicion del registor anterior ' }]);
+      return 
+    }
+
     if (!row.confirmEditCreate()) {
       this.openSnackBar(row.errorsArray);
       return
@@ -157,7 +163,14 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   }
 
   openDialog(row: TableElement<any>) {
+
+    if (this.selection.selected.length ===1 && row.id !== this.selection.selected[0].id){
+      this.openSnackBar([{ type: 'msg', msg: ' No puedo completar la operación, finalice la edicion del registor anterior ' }]);
+      return 
+    }
+
     if (row.editing) {
+      this.selection.clear();
       row.cancelOrDelete(); return;
     } 
     const dialogRef = this.dialog.open(DialogComponent, {

@@ -34,12 +34,12 @@ export abstract class TableElement<T> {
     if (!this.source.existsElement(this.source.data)){
       this.originalData = cloneDeep(this.currentData);
       this.editing = true;
-    } else {
+    } /*else {
           this.errorsArray.push({ 
           type: "msg", 
           msg: " Finalice la edición del registro Anterior" } 
           );
-    }
+    }*/
   }
 
   cancelOrDelete() {

@@ -10,8 +10,6 @@ export class UbicacionService  {
 
   constructor(private getdata: GetData){ }
 
- 
-
   /** Get cell operators list of OptionsItems*/
   getCellOperators(): Observable<OptionsItems[]> {
     return this.getdata.getList(1);
@@ -31,12 +29,13 @@ export class UbicacionService  {
     return this.getdata.getList(4);
   }
   
-  /** Get states  list of OptionsItems*/
+  /** Get states  list of OptionsItems from getByCategoryId because is a child list tiene dependencia */
   getStates():  Observable<OptionsItems[]> {
+
     return this.getdata.getByCategoryId(5);
   }
 
-  /** Get cities  list of OptionsItems*/
+  /** Get cities  list of OptionsItems from getByCategoryId because is a child list tiene dependencia */
   getCities():  Observable<OptionsItems[]> {
     return this.getdata.getByCategoryId(6);
   }

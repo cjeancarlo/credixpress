@@ -19,8 +19,7 @@ export class OptionsComponent implements OnInit {
   
   
   constructor(  public  optionsValidator: OptionsValidatorService, 
-        private _getdata: GetData
-        
+                private _getdata: GetData
      ){  
     this.field   = this.optionsValidator.OptionsObject.fields[0];
     this.displayField = this.field.selectConfig.filterField;
@@ -34,7 +33,6 @@ export class OptionsComponent implements OnInit {
    this.inputControl.valueChanges.subscribe(value => {
         this.filteredOptions =  value ?  this._filter(value)  :  this.allOptions
     })
-    
   }
 
 /**retorna elementos filtrados del arreglo de items seleccionables, dependiendo 
@@ -43,7 +41,7 @@ export class OptionsComponent implements OnInit {
   private _filter(value: string): OptionsItems[]  {
     const filterField = this.field.selectConfig.filterField;
       return  this.allOptions.filter( option => 
-        { console.log(option.description);
+        { 
           return (''+option[filterField]).toLowerCase().indexOf(value) === 0
         }
       );

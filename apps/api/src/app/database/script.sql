@@ -69,3 +69,15 @@ insert into list_options (parentId, description) values (17,'Aragua');
   
 ALTER TABLE `list_options` ADD `categoryId` int(11)  AFTER parentId
 ALTER TABLE `list_options`  CHANGE category categoryId int(11);
+
+
+insert into list_options (parentId, description, categoryId) values (20,'Caracas',6);
+insert into list_options (parentId, description, categoryId) values (23,'Maracay',6);
+insert into list_options (parentId, description, categoryId) values (23,'La Victoria',6);
+insert into list_options (parentId, description, categoryId) values (23,'La Cagua',6);
+insert into list_options (parentId, description, categoryId) values (21,'Valencia',6);
+insert into list_options (parentId, description, categoryId) values (22,'Maracaibo',6);
+insert into list_options (parentId, description, categoryId) values (19,'Los Teques',6);
+insert into list_options (parentId, description, categoryId) values (19,'San Antonio de los Altos',6);
+
+
