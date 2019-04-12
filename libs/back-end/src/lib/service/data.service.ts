@@ -1,9 +1,10 @@
 import { OptionsItems } from './options.model';
 import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { retry, catchError, map } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +25,10 @@ export class GetData {
    * @param parentID  filtra por categoria
   */
  
- 
+ getAllById(objParams: any , url: string): Observable<any[]> {
+  return this.serverPostRequest(url,objParams );
+}  
+
   /*========================================
     CRUD Methods for consuming RESTful API
   =========================================*/
@@ -40,7 +44,6 @@ export class GetData {
   }  
 
 
-  
   // HttpClient API get() method => Fetch list_options 
   getRow(Id: number): Observable<OptionsItems> {
     const parameters = {'Id': Id};
@@ -72,7 +75,7 @@ private serverPostRequest(url: string, params ) : Observable<any[] | any> {
   } 
 
    // Error handling 
-   handleError(error) {
+   handleError(error:any) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {
       // Get client-side error

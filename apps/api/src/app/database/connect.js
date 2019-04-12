@@ -10,6 +10,19 @@ var connection = mysql.createConnection({
     database : 'credix'
 });
 
+
+connection.executeQuery = function executeQuery(query, param, result) {
+    connection.query(query, param, function (err, res) {
+        if(err) {
+            console.log("error: ", err, param);
+            result(err, null);
+        }
+        else{
+            result(null, res);
+        }
+        });   
+    }
+
 //connection.connect();
 
 module.exports = connection;

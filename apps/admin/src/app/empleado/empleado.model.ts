@@ -1,7 +1,8 @@
 export class Empleado {
-  codigo_empl: number;  
-  codigo_naci: number;
-  codigo_docu: number;
+  id: number; 
+  codigo: number;
+  nacimientoId: number;
+  tipodocumentoId: number;
   documento: number;
   nombre: string;
   apellido: string;

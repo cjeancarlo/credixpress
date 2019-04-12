@@ -1,12 +1,12 @@
 
-var listOptions  = require('../model/appModel');
+var listOptions  = require('../model/listOptions');
 
 exports.getlistOptionByCategory = function(req, res) {
   listOptions.listOptionByCategory(req.body.categoryId, function(err, result) {
       if (err){
         res.send(err);
       }
-      res.json(result);
+      res.send(result);
     });
 };
 
@@ -19,7 +19,7 @@ exports.getlistOptionByParent = function(req, res) {
       });
 };
 
-  exports.getlistOptionById = function(req, res) {
+exports.getlistOptionById = function(req, res) {
     listOptions.listOptionById(req.body.Id, function(err, result) {
         if (err) {
           res.send(err);
@@ -27,5 +27,15 @@ exports.getlistOptionByParent = function(req, res) {
         res.send(result);
       });
     };
-  
 
+    /** empleados */
+    var listEmpleados  = require('../model/listEmpleados');
+    exports.getlistEmpleados = function(req, res) {
+      listEmpleados.listEmpleados( function(err, result) {
+          if (err) {
+            res.send(err);
+          }
+          res.send(result);
+        });
+      };
+    

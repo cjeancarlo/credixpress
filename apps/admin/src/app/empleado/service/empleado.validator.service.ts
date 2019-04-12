@@ -3,14 +3,16 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidatorService, TelefonoComponent, ModelObject } from '@credix/components';
 import { UbicacionService } from '@credix/back-end';
 
+
 @Injectable({
   providedIn: 'root'
 })
 export class EmpleadoValidatorService implements ValidatorService {
   constructor( private _ubicacionService: UbicacionService){ }
 
+  
   public EmpleadoObject: ModelObject = {
-    primaryKey: 'codigo_empl',
+    primaryKey: 'id',
     deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
       question: '¿ Seguro desea eliminar ?',
       infoField: 'nombre'
@@ -20,10 +22,13 @@ export class EmpleadoValidatorService implements ValidatorService {
       { name: 'actionsColumn', editType: 'ACTIONSCOLUMN' },
       //{ name: 'selectbox', editType: 'SELECTBOX' },
       { 
-        name: 'codigo_empl', type: 'number', search: true, editType: 'NONE', label: 'Codigo'
+        name: 'id', type: 'number', search: true, editType: 'NONE', label: 'Id'
+      },
+      { 
+        name: 'codigo', type: 'number', search: true,  editType: 'INPUT', label: 'Codigo'
       },
       {
-        name: 'codigo_naci', type: 'number', search: true, editType: 'SELECT',  label: 'Nacionalidad',
+        name: 'nacimientoId', type: 'number', search: true, editType: 'SELECT',  label: 'Nacionalidad',
         validators: [Validators.required],
         selectConfig: { 
           filterField: 'description',
@@ -33,7 +38,7 @@ export class EmpleadoValidatorService implements ValidatorService {
         }
       },
       {
-        name: 'codigo_docu', type: 'number', search: true, editType: 'SELECT', label: 'Tipo Documento',
+        name: 'tipodocumentoId', type: 'number', search: true, editType: 'SELECT', label: 'Tipo Documento',
         validators: [Validators.required],
         selectConfig: { 
           filterField: 'description',
@@ -75,6 +80,8 @@ export class EmpleadoValidatorService implements ValidatorService {
     })
     return this.fGroup;
   }
+
+
 
   
 }

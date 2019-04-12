@@ -80,4 +80,22 @@ insert into list_options (parentId, description, categoryId) values (22,'Maracai
 insert into list_options (parentId, description, categoryId) values (19,'Los Teques',6);
 insert into list_options (parentId, description, categoryId) values (19,'San Antonio de los Altos',6);
 
+CREATE TABLE IF NOT EXISTS `empleados` (
+  `id` int(5) NOT NULL,
+  `codigo`  int(5) NOT NULL,
+  `nacimientoId` int(5) NOT NULL,
+  `tipodocumentoId` int(5) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `documento` int(12) NOT NULL,
+  `apellido` varchar(100) NOT NULL,
+  `email` varchar(50) NOT NULL,  
+  `status`  tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
+
+ALTER TABLE `empleados` ADD PRIMARY KEY (`id`);
+ALTER TABLE `empleados` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ 
+    insert into empleados (codigo,nacimientoId,tipodocumentoId,documento,nombre,apellido,email) values (40,13,  10 , 13380196,  'Jeancarlos',  'Cartaya',     'jeancarlo.cartaya@gmail.com');
