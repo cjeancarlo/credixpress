@@ -19,48 +19,48 @@ export class GetData {
         })
       };
 
-    constructor(private http: HttpClient) { }
+  /**arreglo que contiene todas OptionsItems      */ 
+  allOptions: any[] = [];
 
- /** Get list of OptionsItems  
-   * @param parentID  filtra por categoria
+    constructor(private http: HttpClient) {
+      this.getAll().subscribe( alloptions => {
+        this.allOptions  =  alloptions
+      } )
+
+    }
+
+ /** consume un endPoint (URL) al servidor para traer data 
+   * @param url  end point
+   * @param objParams parametros del query ejemplo { id: 1,  }
   */
- 
- getAllById(objParams: any , url: string): Observable<any[]> {
+  getAllByParams(objParams: any , url: string): Observable<any[]> {
   return this.serverPostRequest(url,objParams );
 }  
 
   /*========================================
     CRUD Methods for consuming RESTful API
   =========================================*/
-  // HttpClient API get() method => Fetch list_options 
-  getByParentId(parentId: number): Observable<OptionsItems[]> {
-      const parameters =  {'parentId': parentId}; 
-      return this.serverPostRequest('/listOptionByParent/',parameters );
-  }  
-
-  getByCategoryId(categoryId: number): Observable<OptionsItems[]> {
-    const parameters =  {'categoryId': categoryId};
-    return this.serverPostRequest('/listOptionByCategory/',parameters );
-  }  
 
 
-  // HttpClient API get() method => Fetch list_options 
-  getRow(Id: number): Observable<OptionsItems> {
-    const parameters = {'Id': Id};
-    return this.serverPostRequest('/listOptionById/',parameters );
+  getByCategoryId(categoryId: number): OptionsItems[] {
+    return this.allOptions.filter(x =>      x.categoryId === categoryId );
+    //return this.serverPostRequest('/listOptionByCategory/',parameters );
   }  
+
 
   
-  getList(parentID: number): Observable<OptionsItems[]> {
-    return this.getByParentId(parentID);
+  
+  getList(parentId: number): OptionsItems[] {
+    return this.allOptions.filter(x =>      x.parentId === parentId )
   }
 
-  getRowfromId(id: number): OptionsItems {
-    let _optionsItems: OptionsItems; 
-    this.getRow(id).subscribe(optionsItems => {
-      _optionsItems = optionsItems;
-     });
-     return _optionsItems;
+  // HttpClient API Post() method => Fetch all list_options 
+  getAll(): Observable<OptionsItems[]> {
+   return this.serverPostRequest('/listAllOptions/',{} );
+ }  
+
+ getRowfromId(id: number): OptionsItems {
+    return   this.allOptions.find(x => x.id === id);
   }
   
 private serverPostRequest(url: string, params ) : Observable<any[] | any> {

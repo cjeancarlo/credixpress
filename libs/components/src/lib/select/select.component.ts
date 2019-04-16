@@ -25,22 +25,21 @@ export class SelectComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.displayField = this.field.selectConfig.filterField;
-
-    this.field.selectConfig.optionSource
-    .subscribe( op => this.allOptions  =op)
+    
+      this.allOptions  =this.field.selectConfig.optionSource;
   }
 
   ngAfterViewInit() {
     this.getFormcontrol().valueChanges.subscribe(value => {
       this.filteredOptions =  value ?  this._filter(value)  :  this.getOptions()
   })
-
     this.forceSelection();
   }
 
   /**limpia cualquier valorno proveniente de las opciones desplegadas*/
   private forceSelection() {
-        this.trigger.panelClosingActions
+
+    this.trigger.panelClosingActions
       .subscribe((e: any) => {
         if (!(e && e.source ||
           // si ya habia selecionado un elemento hago un blur y luego focus sobre un input 
@@ -83,6 +82,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
 
   /**Function that maps an option's control value to its display value in the trigger. */
   displayFn(op?: any): string | undefined {
+    console.log(op);
     /**Del backend viene un string o un number por lo que la descripcion no esta disponible
      * asi que se invoca la funcion que buscar el objeto a partir de un ID unico
      */
@@ -105,7 +105,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
   /** retorna el arreglo de elmentos seleccionables, en el caso que 
    * los elementos tengan depencia valida y filtra los elementos a mostrar
   */
-  private getOptions(): any[] {
+  getOptions(): any[] {
     
     const parentKey = this.field.selectConfig.parentKey;
     let parentValue = '';
@@ -127,7 +127,7 @@ export class SelectComponent implements OnInit, AfterViewInit {
   /**metodo que actualiza el observable<string[]> cuando el input tiene el foco, es decir, actualiza
    * la lista e elementos del input cuando recibe el foco
   */
-  updatefilteredOptions(r: TableElement<any>){
+  updatefilteredOptions(){
     this.filteredOptions = this.getOptions();
   }
 

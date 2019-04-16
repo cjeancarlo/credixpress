@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidatorService, TelefonoComponent, ModelObject } from '@credix/components';
-import { UbicacionService } from '@credix/back-end';
+import { UbicacionService  } from '@credix/back-end';
+import { Store } from '@ngrx/store';
+import { RootState } from '../../root-store/root-state';
+
+
+
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmpleadoValidatorService implements ValidatorService {
-  constructor( private _ubicacionService: UbicacionService){ }
+
+  constructor( private _ubicacionService: UbicacionService   ){   }
 
   
   public EmpleadoObject: ModelObject = {
@@ -32,7 +38,7 @@ export class EmpleadoValidatorService implements ValidatorService {
         validators: [Validators.required],
         selectConfig: { 
           filterField: 'description',
-          optionSource: this._ubicacionService.getNationality(),
+          optionSource:   this._ubicacionService.getNationality(),
           parentKey: null, 
           childKey: null
         }

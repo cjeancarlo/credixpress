@@ -12,6 +12,6 @@ export class EmpleadoDataService {
 constructor(private _getData:GetData ){}
 
 getAllEmpleados(): Observable<Empleado[]> {
-    return this._getData.getAllById({} , '/listEmpleados/');
+    return this._getData.getAllByParams({} , '/listEmpleados/');
   }  
 }

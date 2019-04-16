@@ -4,6 +4,9 @@ module.exports = function(app) {
 
 var optionList = require('../controller/appController');
 
+app.route('/listAllOptions/')  
+  .post(optionList.getlistAllOptions);
+
   app.route('/listOptionByParent/')  
   .post(optionList.getlistOptionByParent);
 

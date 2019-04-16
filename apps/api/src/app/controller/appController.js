@@ -1,6 +1,16 @@
 
 var listOptions  = require('../model/listOptions');
 
+exports.getlistAllOptions = function(req, res) {
+  listOptions.listAllOptions(null,  function(err, result) {
+      if (err){
+        res.send(err);
+      }
+      res.send(result);
+    });
+};
+
+
 exports.getlistOptionByCategory = function(req, res) {
   listOptions.listOptionByCategory(req.body.categoryId, function(err, result) {
       if (err){

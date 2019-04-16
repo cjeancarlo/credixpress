@@ -15,7 +15,7 @@ export class EmpleadosEffects {
         ofType(empleadosActions.LOAD_REQUEST),
         switchMap ( () =>  this._empleadoDataService.getAllEmpleados()
         .pipe(
-            map(empleados => new empleadosActions.LoadSuccessAction(  empleados  )),
+            map(empleados => new empleadosActions.LoadSuccessAction(  empleados )),
             catchError( error => of(new empleadosActions.LoadFailureAction(error)))
         )
          )

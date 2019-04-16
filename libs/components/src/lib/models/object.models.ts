@@ -31,7 +31,7 @@ export interface FieldType {
     /**nombre del campo que va a usar la funciton de filtrado o busqueda */
         filterField: string,
     /** nombre de la funcion  */
-        optionSource: Observable<any>
+    optionSource: Array<any>
         /**si el SELECT tiene dependencia se coloca el nombre del campo padre
         * ejemplo pais => estado => ciudad, si, soy pais mi parentKey es null
         * y mi childKey es estado

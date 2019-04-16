@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ValidatorService, TableDataSource } from '@credix/components';
 import { EmpleadoValidatorService } from './service/empleado.validator.service';
 import { TableElementDataService } from '@credix/components';
 import { Empleado } from './empleado.model';
 import { RootState } from '../root-store/root-state';
 import { Store } from '@ngrx/store';
-import { LoadRequestAction } from './store/actions';
+import  *  as empladosActions  from './store/actions';
+import { Subscription } from 'rxjs';
+
 
 
 @Component({
@@ -16,12 +18,13 @@ import { LoadRequestAction } from './store/actions';
     { provide: ValidatorService, useClass: EmpleadoValidatorService }
   ],
 })
-export class EmpleadoComponent implements OnInit {
+export class EmpleadoComponent implements OnInit, OnDestroy {
 
 
-  EmpleadoList: Empleado[];
   loading: boolean;
   error: any;
+  loaded = false;
+  subscribe: Subscription;  
 
   constructor(
     private store: Store<RootState>,
@@ -30,25 +33,33 @@ export class EmpleadoComponent implements OnInit {
 
       this.tableElementDataService.modelObject = this.empleadoValidator.EmpleadoObject;
 
+      this.subscribe=  this.store.select('empleados').subscribe(empleados => {
+        this.loading = empleados.isLoading
+        this.error = empleados.error;
+        this.loaded = empleados.isLoaded;
+      }) ;
+       
 
-  }
+      }
 
   ngOnInit() {
+    this.store.select(state => state.empleados)
+    .subscribe( state =>  {
+     if  ( state.isLoaded) {
+       this.tableElementDataService.dataSource  = new TableDataSource<any>(
+         state.empleados,     
+         Empleado, 
+         this.empleadoValidator); 
+       }
+     })
 
-    this.store.select('empleados').subscribe(empleados => {
-      this.EmpleadoList = empleados.empleados;
-      this.loading = empleados.isLoading
-      this.error = empleados.error;
-    });
-    
-    this.tableElementDataService.dataSource  = new TableDataSource<any>(
-      this.EmpleadoList,     
-      Empleado, 
-      this.empleadoValidator); 
-      
-      this.store.dispatch(new LoadRequestAction());
-      
+   this.store.dispatch(new empladosActions.LoadRequestAction());
   }
+
+ngOnDestroy(){
+  this.subscribe.unsubscribe()
+
+}
 
   
 }

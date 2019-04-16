@@ -24,9 +24,8 @@ export class OptionsComponent implements OnInit {
     this.field   = this.optionsValidator.OptionsObject.fields[0];
     this.displayField = this.field.selectConfig.filterField;
     
-    
-    this.field.selectConfig.optionSource
-          .subscribe( op => this.filteredOptions =  this.allOptions  =op)
+        this.filteredOptions =  this.allOptions = this.field.selectConfig.optionSource;
+          
     }
 
   ngOnInit() {
