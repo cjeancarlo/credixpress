@@ -12,17 +12,21 @@ var connection = mysql.createConnection({
 
 
 connection.executeQuery = function executeQuery(query, param, result) {
+
     connection.query(query, param, function (err, res) {
         if(err) {
-            console.log("error: ", err, param);
-            result(err, null);
-        }
-        else{
+            if (err.sqlMessage) {
+                result ( null, { error: {
+                    message:err.sqlMessage,
+                    code: err.code
+                } });
+            }else {
+                result (null , { error: err });
+            }
+        } else{
             result(null, res);
         }
         });   
-    }
-
+    };
 //connection.connect();
-
 module.exports = connection;

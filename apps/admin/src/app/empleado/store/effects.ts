@@ -10,10 +10,21 @@ import { EmpleadoDataService } from '../service/empleado.data.service';
 @Injectable()
 export class EmpleadosEffects {
 
-    @Effect() getUsers$ = this.actions$
+    @Effect() getEmpleados$ = this.actions$
     .pipe(
         ofType(empleadosActions.LOAD_REQUEST),
         switchMap ( () =>  this._empleadoDataService.getAllEmpleados()
+        .pipe(
+            map(empleados => new empleadosActions.LoadSuccessAction(  empleados )),
+            catchError( error => of(new empleadosActions.LoadFailureAction(error)))
+        )
+         )
+    );
+
+    @Effect() updateEmpleados$ = this.actions$
+    .pipe(
+        ofType(empleadosActions.LOAD_UPDATE),
+        switchMap ( ( empleado ) =>  this._empleadoDataService.getEditOrCreate( empleado  )
         .pipe(
             map(empleados => new empleadosActions.LoadSuccessAction(  empleados )),
             catchError( error => of(new empleadosActions.LoadFailureAction(error)))

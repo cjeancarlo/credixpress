@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs';
 })
 export class EmpleadoComponent implements OnInit, OnDestroy {
 
-
+  
   loading: boolean;
   error: any;
   loaded = false;
@@ -58,6 +58,29 @@ export class EmpleadoComponent implements OnInit, OnDestroy {
 
 ngOnDestroy(){
   this.subscribe.unsubscribe()
+
+}
+
+action(obj: any) {
+ const mapEmpleado: Empleado =   { 
+   ...obj.data,
+  //id: obj.id, 
+  nacimientoId: obj.data.nacimientoId.id,
+  tipodocumentoId: obj.data.tipodocumentoId.id,
+
+}
+ console.log(mapEmpleado);
+ switch (obj.action) {
+  case 'INSERT':
+    this.store.dispatch(new empladosActions.LoadInsertAction( mapEmpleado ));
+  break;
+  case 'UPDATE':     
+    this.store.dispatch(new empladosActions.LoadUpdateAction( mapEmpleado ));   
+  break;
+   default:
+     break;
+ }
+  
 
 }
 

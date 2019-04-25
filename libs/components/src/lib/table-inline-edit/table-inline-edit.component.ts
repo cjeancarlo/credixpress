@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
 
 import { TableElementDataService } from './table-element-data.service';
 import { TableElement } from './table-element';
@@ -38,12 +38,15 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
   dataSource: TableDataSource<any>;
 
+  @Output() actionEmmiter: EventEmitter<any> = new EventEmitter();
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private tableElementDataService: TableElementDataService,
               private snackBar: MatSnackBar,
-              public dialog: MatDialog ) {
+              public dialog: MatDialog
+               ) {
     this.dataSource = this.tableElementDataService.dataSource;
     this.modelObject = this.tableElementDataService.modelObject;
   }
@@ -152,6 +155,13 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       data: [{ type: 'msg', msg: ' Datos Actualizados ' }],
       duration: 3000,
     });
+    this.actionEmmiter.emit(
+      { 
+        action: row.id === -1 ? 'INSERT' : 'UPDATE' ,
+        data: row.currentData
+      }
+      );
+    
     this.selection.clear();
   }
 

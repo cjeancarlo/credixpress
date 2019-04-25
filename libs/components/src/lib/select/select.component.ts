@@ -82,7 +82,6 @@ export class SelectComponent implements OnInit, AfterViewInit {
 
   /**Function that maps an option's control value to its display value in the trigger. */
   displayFn(op?: any): string | undefined {
-    console.log(op);
     /**Del backend viene un string o un number por lo que la descripcion no esta disponible
      * asi que se invoca la funcion que buscar el objeto a partir de un ID unico
      */

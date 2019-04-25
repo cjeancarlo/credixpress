@@ -39,7 +39,8 @@ exports.getlistOptionById = function(req, res) {
     };
 
     /** empleados */
-    var listEmpleados  = require('../model/listEmpleados');
+    var listEmpleados  = require('../model/Empleados');
+    
     exports.getlistEmpleados = function(req, res) {
       listEmpleados.listEmpleados( function(err, result) {
           if (err) {
@@ -48,4 +49,13 @@ exports.getlistOptionById = function(req, res) {
           res.send(result);
         });
       };
+
+      exports.EditOrCreateEmpleado = function(req, res) {
+        listEmpleados.EditOrCreateEmpleado(req.body, function(err, result) {
+            if (err) {
+              res.send(err);
+            }
+            res.send(result);
+          });
+        };
     

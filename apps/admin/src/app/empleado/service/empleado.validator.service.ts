@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidatorService, TelefonoComponent, ModelObject } from '@credix/components';
 import { UbicacionService  } from '@credix/back-end';
-import { Store } from '@ngrx/store';
-import { RootState } from '../../root-store/root-state';
 
 
 

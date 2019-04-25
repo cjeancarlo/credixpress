@@ -14,4 +14,10 @@ constructor(private _getData:GetData ){}
 getAllEmpleados(): Observable<Empleado[]> {
     return this._getData.getAllByParams({} , '/listEmpleados/');
   }  
+
+
+getEditOrCreate( empleado: any ): Observable<Empleado[]> {
+    return this._getData.getAllByParams(empleado.empleado , '/EditOrCreateEmpleado/');
+  }    
+
 }

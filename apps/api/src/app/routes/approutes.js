@@ -20,6 +20,8 @@ app.route('/listAllOptions/')
   app.route('/listEmpleados/')
   .post(optionList.getlistEmpleados);
 
+  app.route('/EditOrCreateEmpleado/')
+  .post(optionList.EditOrCreateEmpleado);
 
 };
 
