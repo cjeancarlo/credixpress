@@ -7,6 +7,7 @@ export const LOAD_FAILURE = '[Empleado] Load Failure';
 export const LOAD_SUCCESS = '[Empleado] Load Success';
 export const LOAD_INSERT = '[Empleado] INSERT';
 export const LOAD_UPDATE = '[Empleado] UPDATE';
+export const LOAD_MERGE_REQUEST = '[Empleado] UPDATE STATE STORE';
 
 
 export class LoadInsertAction implements Action {
@@ -20,6 +21,12 @@ export class LoadUpdateAction implements Action {
 }
 export class LoadRequestAction implements Action {
   readonly type = LOAD_REQUEST;
+}
+
+
+export class LoadRequestMergeAction implements Action {
+  readonly type = LOAD_MERGE_REQUEST;
+  constructor(public  empleado:Empleado  ) {}
 }
 
 export class LoadFailureAction implements Action {
@@ -37,4 +44,5 @@ LoadRequestAction |
 LoadFailureAction | 
 LoadSuccessAction | 
 LoadInsertAction | 
-LoadUpdateAction;
+LoadUpdateAction |
+LoadRequestMergeAction;

@@ -26,7 +26,14 @@ export class EmpleadosEffects {
         ofType(empleadosActions.LOAD_UPDATE),
         switchMap ( ( empleado ) =>  this._empleadoDataService.getEditOrCreate( empleado  )
         .pipe(
-            map(empleados => new empleadosActions.LoadSuccessAction(  empleados )),
+            map(( updatedEmpleado ) => 
+            { 
+                console.log(updatedEmpleado);
+                return new empleadosActions.LoadRequestAction();
+            }
+            
+            
+            ),
             catchError( error => of(new empleadosActions.LoadFailureAction(error)))
         )
          )

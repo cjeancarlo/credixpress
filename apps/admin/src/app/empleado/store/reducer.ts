@@ -15,9 +15,18 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
           error: null
         };
       }
+      
       case empleadoActions.LOAD_UPDATE: {
         return {
           ...state,
+          isLoading: true,
+          isLoaded: false,
+          error: null
+        };
+      }
+      case empleadoActions.LOAD_MERGE_REQUEST: {
+        return {
+          ...state, 
           isLoading: true,
           isLoaded: false,
           error: null

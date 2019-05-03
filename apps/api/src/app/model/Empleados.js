@@ -1,11 +1,10 @@
 var sql = require('../database/connect.js');
 
 exports.listEmpleados = function listEmpleados( result) {
-    var query = "select  * from `empleados`   ";
-    sql.executeQuery(query, null , result);
+    sql.executeQuery( getDml("SELECT") , null , result);
 };
 
-function getDml(action, empleado ) {
+function getDml(action, empleado = null ) {
     switch (action  ) {
         case "INSERT":
             return ` INSERT INTO empleados 
@@ -26,21 +25,21 @@ function getDml(action, empleado ) {
                     nombre="${empleado.nombre}", 
                     apellido="${empleado.apellido}",
                     email="${empleado.email}"
-                    where id = ${empleado.id}`;
+                    where id = ?  `;
+        case "SELECT":
+                    return  "select * from `empleados`";
         default:
-        return "";
+                    return  "";
     }
 }
 
-
 exports.EditOrCreateEmpleado = function EditOrCreateEmpleado(empleado, result) {
     var query ="";
-    
     if (empleado.id) {
         query =getDml("UPDATE", empleado );
-} else {
-    query = getDml("INSERT", empleado );
-}
-    query = query.replace(/(\r\n|\n|\r)/gm,"");
-    sql.executeQuery(query, null , result);
+        } else {
+        query = getDml("INSERT", empleado );
+        }
+        query = query.replace(/(\r\n|\n|\r)/gm,"");
+     sql.executeQuery(query, empleado.id , result, true, `${ getDml("SELECT") } WHERE id = ? `  );
 };

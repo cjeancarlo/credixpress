@@ -80,7 +80,6 @@ action(obj: any) {
    default:
      break;
  }
-  
 
 }
 
