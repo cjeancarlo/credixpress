@@ -6,39 +6,64 @@ import { of } from 'rxjs';
 import { EmpleadoDataService } from '../service/empleado.data.service';
 
 
-
 @Injectable()
 export class EmpleadosEffects {
 
     @Effect() getEmpleados$ = this.actions$
-    .pipe(
-        ofType(empleadosActions.LOAD_REQUEST),
-        switchMap ( () =>  this._empleadoDataService.getAllEmpleados()
         .pipe(
-            map(empleados => new empleadosActions.LoadSuccessAction(  empleados )),
-            catchError( error => of(new empleadosActions.LoadFailureAction(error)))
-        )
-         )
-    );
+            ofType(empleadosActions.LOAD_REQUEST),
+            switchMap(() => this._empleadoDataService.getAllEmpleados()
+                .pipe(
+                    map(empleados => new empleadosActions.LoadSuccessAction(empleados)),
+                    catchError(error => of(new empleadosActions.LoadFailureAction(error)))
+                )
+            )
+        );
 
     @Effect() updateEmpleados$ = this.actions$
-    .pipe(
-        ofType(empleadosActions.LOAD_UPDATE),
-        switchMap ( ( empleado ) =>  this._empleadoDataService.getEditOrCreate( empleado  )
         .pipe(
-            map(( updatedEmpleado ) => 
-            { 
-                console.log(updatedEmpleado);
-                return new empleadosActions.LoadRequestAction();
-            }
-            
-            
-            ),
-            catchError( error => of(new empleadosActions.LoadFailureAction(error)))
-        )
-         )
-    );
+            ofType(empleadosActions.LOAD_UPDATE),
+            switchMap((empleado) => this._empleadoDataService.getEditOrCreate(empleado)
+                .pipe(
+                    map(updatedEmpleado => {
+                        if (!updatedEmpleado[0]) {
 
-    constructor( private actions$: Actions, private _empleadoDataService: EmpleadoDataService  ) {}
+                            throw updatedEmpleado;
+                        }
+
+                        return new empleadosActions.LoadUpdateSuccessAction(updatedEmpleado[0]);
+                    }
+                    ),
+                    catchError(error => {
+                        console.log(error);
+                        return of(new empleadosActions.LoadFailureAction(error));
+                    }))
+
+            )
+        );
+
+    @Effect() insertEmpleados$ = this.actions$
+        .pipe(
+            ofType(empleadosActions.LOAD_INSERT),
+            switchMap((empleado) => this._empleadoDataService.getEditOrCreate(empleado)
+                .pipe(
+                    map(updatedEmpleado => {
+                        if (!updatedEmpleado[0]) {
+
+                            throw updatedEmpleado;
+                        }
+                        return new empleadosActions.LoadInsertSuccessAction(updatedEmpleado[0]);
+                    }
+                    ),
+                    catchError(error => {
+                        console.log(error);
+                        return of(new empleadosActions.LoadFailureAction(error));
+                    }))
+
+            )
+        );
+
+
+    constructor(private actions$: Actions, private _empleadoDataService: EmpleadoDataService) { }
 
 }

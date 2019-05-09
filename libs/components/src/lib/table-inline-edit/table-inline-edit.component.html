@@ -30,19 +30,19 @@
                     </mat-checkbox>
                     <credix-input [rowElement]="row" [field]="field" *ngIf="field.editType ==='INPUT'"> </credix-input>
                     <credix-select [rowElement]="row" [field]="field" *ngIf="field.editType ==='SELECT'"></credix-select>
-                    <credix-slide [rowElement]="row" [field]="field" *ngIf="field.editType ==='SLIDE'"> </credix-slide>
+                    <credix-slide  [rowElement]="row" [field]="field" *ngIf="field.editType ==='SLIDE'"> </credix-slide>
                     <credix-display [rowElement]="row" [field]="field" *ngIf="field.editType ==='NONE'"> </credix-display>
-                    <ng-container *ngIf="field.editType ==='ACTIONSCOLUMN'">
+                    <div *ngIf="field.editType ==='ACTIONSCOLUMN'"  style="display: flex; padding-right: 10px">
                         <button *ngIf="!row.editing" mat-icon-button color="primary" focusable="false" (click)="startEditing(row)">
-                                <fa-icon [icon]="faPen"  ></fa-icon>
+                                <fa-icon [icon]="faPen" ></fa-icon>
                           </button>
                         <button *ngIf="row.editing" mat-icon-button color="primary" focusable="false" (click)="confirmEditCreate(row)">
-                                <fa-icon [icon]="faSave"  >1</fa-icon>
+                                <fa-icon [icon]="faSave">1</fa-icon>
                           </button>
                         <button mat-icon-button color="primary" focusable="false" (click)="openDialog(row)">
                                 <fa-icon [icon]="faTimes"  ></fa-icon>
                           </button>
-                    </ng-container>
+                    </div>
                 </td>
             </ng-container>
         </ng-container>

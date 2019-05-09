@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
-
 import { TableElementDataService } from './table-element-data.service';
 import { TableElement } from './table-element';
 import { TableDataSource } from './table-data-source';
 import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
-
 import { faPlus, faTimes, faPen, faSave } from '@fortawesome/free-solid-svg-icons';
-
 import { SelectionModel } from '@angular/cdk/collections';
 import { EnterLeave } from './table-inline.animations';
 import { MessageComponent } from '../message/message.component';
@@ -15,12 +12,12 @@ import { FormControl } from '@angular/forms';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ComponentType } from '@angular/core/src/render3';
 import { ModelObject } from '../models/object.models';
+import { TableElementFactory } from './table-element.factory';
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
   styleUrls: ['./table-inline-edit.component.scss'],
-  animations: [EnterLeave],
-
+  animations: [EnterLeave]
 })
 export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
@@ -39,14 +36,13 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   dataSource: TableDataSource<any>;
 
   @Output() actionEmmiter: EventEmitter<any> = new EventEmitter();
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private tableElementDataService: TableElementDataService,
-              private snackBar: MatSnackBar,
-              public dialog: MatDialog
-               ) {
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
+  ) {
     this.dataSource = this.tableElementDataService.dataSource;
     this.modelObject = this.tableElementDataService.modelObject;
   }
@@ -59,7 +55,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
 
     this.selection.onChange.subscribe(row => {
-      this.disableDetailsButtons = row.source.selected.length===1 ? false : true 
+      this.disableDetailsButtons = row.source.selected.length === 1 ? false : true
     })
   }
 
@@ -89,7 +85,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  
+
   /**agrega un registro el la primera posicion del 
    arreglo de registro mostrando en la pantalla 
   */
@@ -99,23 +95,33 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
     const pos = this.paginator.pageIndex * this.paginator.pageSize;
 
+    const row = TableElementFactory.createTableElement({
+      id: -1,
+      editing: true,
+      currentData: null,
+      source: null,
+      validator: null,
+      errorsArray: []
+    });
+
+    this.SetSelection(row);
     this.dataSource.createNew(pos);
   }
 
-  startEditing(row: TableElement<any> ){
-
-    if (this.selection.selected.length ===1 && row.id !== this.selection.selected[0].id){
+  startEditing(row: TableElement<any>) {
+    if (this.selection.selected.length === 1 && row.id !== this.selection.selected[0].id) {
       this.openSnackBar([{ type: 'msg', msg: ' No puedo completar la operación, finalice la edicion del registor anterior ' }]);
-      return 
+      return
     }
-      this.selection.clear();
-      this.selection.toggle(row);
-      this.selection.isSelected(row);
-    
-    
+
+    this.SetSelection(row);
     row.startEdit();
-  
-  
+  }
+
+  private SetSelection(row: TableElement<any>) {
+    this.selection.clear();
+    this.selection.toggle(row);
+    this.selection.isSelected(row);
   }
 
   getDisplayedColumns(tipo = 'name'): string[] {
@@ -126,10 +132,10 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
         };
       });
     }
-
     return this.modelObject.fields.map(item => item[tipo]);
   }
-  getDetalle(component: ComponentType<{}> ){
+
+  getDetalle(component: ComponentType<{}>) {
 
     const dialogRef = this.dialog.open(component, {
       data: {
@@ -137,58 +143,68 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
         row: this.selection.selected[0].currentData
       }
     });
-    
   }
 
   confirmEditCreate(row: TableElement<any>) {
-    if (this.selection.selected.length ===1 && row.id !== this.selection.selected[0].id){
-      this.openSnackBar([{ type: 'msg', msg: ' No puedo completar la operación, finalice la edicion del registor anterior ' }]);
-      return 
+    
+    /**si estoy editando y no modifico ningun data no hay por que hacer una llamada el servidor */
+    if (JSON.stringify(row.originalData).toString() === JSON.stringify(row.currentData).toString()) {
+      this.openSnackBar([{ type: 'msg', msg: ' No hay cambios que guardar' }]);
+      this.selection.clear();
+      row.editing = false;
+      return;
+    }
+
+    if (this.selection.selected.length === 1 && row.id !== this.selection.selected[0].id) {
+      this.openSnackBar([{ type: 'msg', msg: ' No puedo completar la operación, finalice la edicion del registro anterior ' }]);
+      return;
     }
 
     if (!row.confirmEditCreate()) {
       this.openSnackBar(row.errorsArray);
-      return
+      return;
     };
 
     this.snackBar.openFromComponent(MessageComponent, {
       data: [{ type: 'msg', msg: ' Datos Actualizados ' }],
       duration: 3000,
     });
+
+    
     this.actionEmmiter.emit(
-      { 
-        action: row.id === -1 ? 'INSERT' : 'UPDATE' ,
+      {
+        action: row.id === -1 ? 'INSERT' : 'UPDATE',
         data: row.currentData
       }
-      );
-    
+    );
+
     this.selection.clear();
   }
 
   private openSnackBar(data: any) {
     this.snackBar.openFromComponent(MessageComponent, {
       data: data,
-      duration: 3000,
+      duration: 3000
     });
   }
 
   openDialog(row: TableElement<any>) {
 
-    if (this.selection.selected.length ===1 && row.id !== this.selection.selected[0].id){
-      this.openSnackBar([{ type: 'msg', msg: ' No puedo completar la operación, finalice la edicion del registor anterior ' }]);
-      return 
+    if (this.selection.selected.length === 1 && row.id !== this.selection.selected[0].id) {
+      this.openSnackBar([{ type: 'msg', msg: ' No puedo completar la operación, finalice la edicion del registro anterior ' }]);
+      return;
     }
 
     if (row.editing) {
       this.selection.clear();
       row.cancelOrDelete(); return;
-    } 
+    }
     const dialogRef = this.dialog.open(DialogComponent, {
       data: {
         currentData: row.currentData,
         deleteInfo: this.modelObject.deleteInfo
       }
-    }); 
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         row.cancelOrDelete();
@@ -200,21 +216,18 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
 
-/** Whether the number of selected elements matches the total number of rows. */
-isAllSelected() {
-  const numSelected = this.selection.selected.length;
-  const numRows = this.dataSource.data.length;
-  return numSelected === numRows;
-}
-
-/** Selects all rows if they are not all 
-  selected; otherwise clear selection. */
-masterToggle() {
-  this.isAllSelected() ?
-    this.selection.clear() :
-    this.dataSource.data.forEach(row => this.selection.select(row));
-}
- 
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
+  }
 
 }

@@ -10,7 +10,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule, MatSortModule, MatSlideToggleModule } from '@angular/material';
+import { MatInputModule, MatSortModule, MatSlideToggleModule, MatCardModule, MatProgressSpinnerModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material/tabs';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -31,7 +31,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatSlideToggleModule,
     MatAutocompleteModule,
     MatSnackBarModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatCardModule,
+    MatProgressSpinnerModule
   ],
   imports: [CommonModule,
     MatTableModule,
@@ -47,7 +49,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     MatSlideToggleModule,
     MatAutocompleteModule,
     MatSnackBarModule,
-    FontAwesomeModule]
+    FontAwesomeModule,
+    MatCardModule,
+    MatProgressSpinnerModule]
 })
 export class MaterialModule {}
 

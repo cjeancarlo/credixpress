@@ -2,3 +2,7 @@
     empleado works!
 </p>
  <credix-table-inline-edit *ngIf="loaded" (actionEmmiter)="action($event)"></credix-table-inline-edit> 
+ <credix-loading *ngIf="loading"></credix-loading>
+ <credix-display-error  *ngIf="error" [error]=error ></credix-display-error>
+
+ 

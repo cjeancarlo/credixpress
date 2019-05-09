@@ -7,9 +7,6 @@ import { RootState } from '../root-store/root-state';
 import { Store } from '@ngrx/store';
 import  *  as empladosActions  from './store/actions';
 import { Subscription } from 'rxjs';
-
-
-
 @Component({
   selector: 'credix-empleado',
   templateUrl: './empleado.component.html',
@@ -18,9 +15,8 @@ import { Subscription } from 'rxjs';
     { provide: ValidatorService, useClass: EmpleadoValidatorService }
   ],
 })
-export class EmpleadoComponent implements OnInit, OnDestroy {
 
-  
+export class EmpleadoComponent implements OnInit, OnDestroy {
   loading: boolean;
   error: any;
   loaded = false;
@@ -38,8 +34,6 @@ export class EmpleadoComponent implements OnInit, OnDestroy {
         this.error = empleados.error;
         this.loaded = empleados.isLoaded;
       }) ;
-       
-
       }
 
   ngOnInit() {
@@ -69,7 +63,7 @@ action(obj: any) {
   tipodocumentoId: obj.data.tipodocumentoId.id,
 
 }
- console.log(mapEmpleado);
+
  switch (obj.action) {
   case 'INSERT':
     this.store.dispatch(new empladosActions.LoadInsertAction( mapEmpleado ));

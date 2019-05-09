@@ -20,15 +20,29 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
         return {
           ...state,
           isLoading: true,
-          isLoaded: false,
+          isLoaded: true,
           error: null
         };
       }
-      case empleadoActions.LOAD_MERGE_REQUEST: {
+      case empleadoActions.LOAD_INSERT_SUCCESS: {
         return {
-          ...state, 
-          isLoading: true,
-          isLoaded: false,
+            ...state,
+          empleados:  function() { state.empleados.push(action.empleado);  return state.empleados}(),
+          isLoading: false,
+          isLoaded: true,
+          error: null
+        };
+      }
+      case empleadoActions.LOAD_UPDATE_SUCCESS: {
+        return {
+            ...state,
+          empleados: state.empleados.map( empleados => {
+            return  empleados.id === action.empleado.id ? 
+            { ...action.empleado } : 
+            { ...empleados }
+          } ) , 
+          isLoading: false,
+          isLoaded: true,
           error: null
         };
       }
@@ -36,7 +50,7 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
         return {
           ...state,
           isLoading: true,
-          isLoaded: false,
+          isLoaded: true,
           error: null
         };
       }

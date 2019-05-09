@@ -2,7 +2,6 @@ import { GetData} from '@credix/back-end';
 import { Observable } from 'rxjs';
 import { Empleado } from '../empleado.model';
 import { Injectable } from '@angular/core';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +14,7 @@ getAllEmpleados(): Observable<Empleado[]> {
     return this._getData.getAllByParams({} , '/listEmpleados/');
   }  
 
-
+  
 getEditOrCreate( empleado: any ): Observable<Empleado[]> {
     return this._getData.getAllByParams(empleado.empleado , '/EditOrCreateEmpleado/');
   }    

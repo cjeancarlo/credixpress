@@ -80,6 +80,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
         id: -1,
         editing: true,
         currentData: this.createNewObject(),
+        originalData:this.createNewObject(),
         source: this,
         validator: this.validatorService.getRowValidator(),
         errorsArray:  []
@@ -88,11 +89,13 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
       if (this.config.prependNewElements) {
         this.rowsSubject.next([newElement].concat(source));
       } else {
-
+        
         
         source.splice(pos, 0, newElement);
+        
         this.rowsSubject.next(source);
         this.data = source;
+        
         this._updateChangeSubscription();
       }
     } 
@@ -108,8 +111,11 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
       this.fillErrors(row);
       return false;
     }
+
+    
     const source = this.rowsSubject.getValue();
-    row.id = source.length - 1;
+    //row.id = source.length - 1;
+    
     this.rowsSubject.next(source);
     row.editing = false;
 
@@ -145,7 +151,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
     source[index] = row;
     this.rowsSubject.next(source);
 
-    row.originalData = undefined;
+    row.originalData = row.currentData;
     row.editing = false;
 
     this.updateDatasourceFromRows(source);
@@ -285,9 +291,14 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    * @param rows Rows to extract the data.
    */
   protected getDataFromRows(rows: TableElement<T>[]): T[] {
+
+    
     return rows
-      .filter(row => row.id !== -1)
+      //.filter(row => row.id !== -1)
       .map<T>((row) => {
+        if (row.id === -1){
+        }
+        
       return row.originalData ? row.originalData : row.currentData;
     });
   }
@@ -297,8 +308,8 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
    * @param rows Rows that contains the datasource's new data.
    */
   protected updateDatasourceFromRows(rows: TableElement<T>[]): void {
-      this.currentData = this.getDataFromRows(rows);
-       this.data = this.getRowsFromData(this.currentData);
+    this.currentData = this.getDataFromRows(rows);
+      //this.data = this.getRowsFromData(this.currentData);
       this.datasourceSubject.next(this.currentData);
       this._updateChangeSubscription(); 
   }
@@ -312,6 +323,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
       return TableElementFactory.createTableElement({
         id: this.getRowIdFromIndex(index, arrayData.length),
         editing: false,
+        originalData:data,
         currentData: data,
         source: this,
         validator: this.validatorService.getRowValidator(),
