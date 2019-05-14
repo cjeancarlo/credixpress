@@ -13,6 +13,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { ComponentType } from '@angular/core/src/render3';
 import { ModelObject } from '../models/object.models';
 import { TableElementFactory } from './table-element.factory';
+import { Store } from '@ngrx/store';
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
@@ -32,16 +33,18 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   faTimes = faTimes;
   faSave = faSave;
   modelObject: ModelObject;
+  
 
   dataSource: TableDataSource<any>;
 
-  @Output() actionEmmiter: EventEmitter<any> = new EventEmitter();
+  
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private tableElementDataService: TableElementDataService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private store: Store<any>
   ) {
     this.dataSource = this.tableElementDataService.dataSource;
     this.modelObject = this.tableElementDataService.modelObject;
@@ -57,6 +60,24 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     this.selection.onChange.subscribe(row => {
       this.disableDetailsButtons = row.source.selected.length === 1 ? false : true
     })
+
+
+    this.store.select(state => state['empleados'])
+    .subscribe( state => {
+      if (state.error) {
+          this.openSnackBar([{ type: 'msg', msg: state.error  }]);
+          this.selection.clear();
+          return;
+        } else {
+          if (state.action === 'LOAD_INSERT_SUCCESS' || state.action === 'LOAD_UPDATE_SUCCESS' )
+         this.snackBar.openFromComponent(MessageComponent, {
+           data: [{ type: 'msg', msg: ' Datos Actualizados ' }],
+           duration: 3000,
+          });
+        }
+    
+      })
+
   }
 
   ngAfterViewInit() { }
@@ -165,18 +186,23 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       return;
     };
 
-    this.snackBar.openFromComponent(MessageComponent, {
-      data: [{ type: 'msg', msg: ' Datos Actualizados ' }],
-      duration: 3000,
-    });
-
     
-    this.actionEmmiter.emit(
-      {
-        action: row.id === -1 ? 'INSERT' : 'UPDATE',
-        data: row.currentData
+    const flatObject ={};
+    Object.keys(row.currentData).forEach((key) => {
+      if (typeof row.currentData[key] === 'object'){
+        flatObject[key] = row.currentData[key].id;
+      }else {
+        flatObject[key] = row.currentData[key];
       }
-    );
+  });
+
+  console.log(flatObject);
+
+    if(row.id === -1){
+    this.store.dispatch(new this.tableElementDataService.actions.LoadInsertAction( flatObject ));
+  } else {
+    this.store.dispatch(new this.tableElementDataService.actions.LoadUpdateAction( flatObject ));
+  }
 
     this.selection.clear();
   }

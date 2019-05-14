@@ -26,10 +26,10 @@ export class EmpleadoValidatorService implements ValidatorService {
       { name: 'actionsColumn', editType: 'ACTIONSCOLUMN' },
       //{ name: 'selectbox', editType: 'SELECTBOX' },
       { 
-        name: 'id', type: 'number', search: true, editType: 'NONE', label: 'Id'
+        name: 'id', type: 'number', search: true, editType: 'NONE', label: 'Id', align: 'right'
       },
       { 
-        name: 'codigo', type: 'number', search: true,  editType: 'INPUT', label: 'Codigo'
+        name: 'codigo', type: 'number', search: true,  editType: 'INPUT', label: 'Codigo', align: 'right'
       },
       {
         name: 'nacimientoId', type: 'number', search: true, editType: 'SELECT',  label: 'Nacionalidad',
@@ -52,7 +52,7 @@ export class EmpleadoValidatorService implements ValidatorService {
         }
       },
       { 
-        name: 'documento', type: 'number', search: true, editType: 'INPUT',  label: 'Documento',
+        name: 'documento', type: 'number', search: true, editType: 'INPUT',  label: 'Documento', align: 'right',
         validators: [Validators.required] 
       },
       { 

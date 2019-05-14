@@ -5,7 +5,7 @@ import { TableElementDataService } from '@credix/components';
 import { Empleado } from './empleado.model';
 import { RootState } from '../root-store/root-state';
 import { Store } from '@ngrx/store';
-import  *  as empladosActions  from './store/actions';
+import  *  as empleadosActions  from './store/actions';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'credix-empleado',
@@ -28,11 +28,14 @@ export class EmpleadoComponent implements OnInit, OnDestroy {
     private tableElementDataService: TableElementDataService) {
 
       this.tableElementDataService.modelObject = this.empleadoValidator.EmpleadoObject;
+      this.tableElementDataService.actions = empleadosActions;
 
       this.subscribe=  this.store.select('empleados').subscribe(empleados => {
         this.loading = empleados.isLoading
         this.error = empleados.error;
         this.loaded = empleados.isLoaded;
+
+        
       }) ;
       }
 
@@ -47,36 +50,12 @@ export class EmpleadoComponent implements OnInit, OnDestroy {
        }
      })
 
-   this.store.dispatch(new empladosActions.LoadRequestAction());
+   this.store.dispatch(new empleadosActions.LoadRequestAction());
   }
 
 ngOnDestroy(){
   this.subscribe.unsubscribe()
-
 }
-
-action(obj: any) {
- const mapEmpleado: Empleado =   { 
-   ...obj.data,
-  //id: obj.id, 
-  nacimientoId: obj.data.nacimientoId.id,
-  tipodocumentoId: obj.data.tipodocumentoId.id,
-
-}
-
- switch (obj.action) {
-  case 'INSERT':
-    this.store.dispatch(new empladosActions.LoadInsertAction( mapEmpleado ));
-  break;
-  case 'UPDATE':     
-    this.store.dispatch(new empladosActions.LoadUpdateAction( mapEmpleado ));   
-  break;
-   default:
-     break;
- }
-
-}
-
   
 }
 

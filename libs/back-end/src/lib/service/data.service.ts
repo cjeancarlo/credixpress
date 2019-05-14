@@ -85,6 +85,9 @@ private serverPostRequest(url: string, params ) : Observable<any[] | any> {
       switch (error.status) {
         case 0:
         errorMessage = `El servidor no Responde`;  
+        break;
+        case 200:
+        errorMessage = error.error.text;
           break;
         default:
         errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;

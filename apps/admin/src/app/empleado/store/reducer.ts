@@ -12,7 +12,8 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
           ...state,
           isLoading: true,
           isLoaded: false,
-          error: null
+          error: null,
+          action: "LOAD_REQUEST"
         };
       }
       
@@ -21,7 +22,8 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
           ...state,
           isLoading: true,
           isLoaded: true,
-          error: null
+          error: null,
+          action: "LOAD_UPDATE"
         };
       }
       case empleadoActions.LOAD_INSERT_SUCCESS: {
@@ -30,7 +32,8 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
           empleados:  function() { state.empleados.push(action.empleado);  return state.empleados}(),
           isLoading: false,
           isLoaded: true,
-          error: null
+          error: null,
+          action: "LOAD_INSERT_SUCCESS"
         };
       }
       case empleadoActions.LOAD_UPDATE_SUCCESS: {
@@ -43,7 +46,8 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
           } ) , 
           isLoading: false,
           isLoaded: true,
-          error: null
+          error: null,
+          action: "LOAD_UPDATE_SUCCESS"
         };
       }
       case empleadoActions.LOAD_INSERT: {
@@ -51,7 +55,8 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
           ...state,
           isLoading: true,
           isLoaded: true,
-          error: null
+          error: null,
+          action: "LOAD_INSERT"
         };
       }
       case empleadoActions.LOAD_SUCCESS: {
@@ -59,14 +64,16 @@ export function empleadoReducer(state = initialState, action: empleadoActions.Ac
                   empleados: [ ...action.empleados ],
                   isLoading: false,
                   isLoaded: true,
-                  error: null
+                  error: null,
+                  action: "LOAD_SUCCESS"
                   }
       }
       case empleadoActions.LOAD_FAILURE: {
         return {
           ...state,
           isLoading: false,
-          error: action.error
+          error: action.error,
+          action: "LOAD_FAILURE"
         };
       }
       default: {

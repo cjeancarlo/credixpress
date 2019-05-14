@@ -9,5 +9,6 @@ export class TableElementDataService {
 
   dataSource: TableDataSource<any>;
   modelObject: ModelObject;
+  actions: any;
   constructor() { }
 }

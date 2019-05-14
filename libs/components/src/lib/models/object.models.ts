@@ -24,6 +24,7 @@ export interface FieldType {
     editType: EditType, 
     /**etiqueta  del campo  */
     label?: string,
+    align?: string,
     /** Array de  validator is a function that processes a FormControl or collection of controls and 
      * returns an error map or null. A null map means that validation has passed. */
     validators?: ValidatorFn[]

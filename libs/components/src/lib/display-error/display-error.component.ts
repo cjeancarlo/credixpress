@@ -20,6 +20,8 @@ export class DisplayErrorComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+
+    console.log(this.error);
   }
 
 }
