@@ -35,7 +35,7 @@ export class EmpleadosEffects {
                     }
                     ),
                     catchError(error => {
-                        console.log(error);
+//                        console.log(error);
                         return of(new empleadosActions.LoadFailureAction(error));
                     }))
 

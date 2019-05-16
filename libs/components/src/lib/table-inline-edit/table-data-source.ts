@@ -71,7 +71,7 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
   /**
    * Start the creation of a new element, pushing an empty-data row in the table.
    */
-  createNew(pos = 0 ): void {
+  createNew(pos = 0 ): any {
     const source = this.rowsSubject.getValue();
 
     if (!this.existsElement(source)) {
@@ -97,7 +97,9 @@ export class TableDataSource<T> extends MatTableDataSource<TableElement<T>> {
         this.data = source;
         
         this._updateChangeSubscription();
+    
       }
+      return newElement;
     } 
   }
 

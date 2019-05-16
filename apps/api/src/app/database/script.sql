@@ -1,8 +1,9 @@
 CREATE TABLE IF NOT EXISTS `empleados` (
   `id` int(11) NOT NULL,
-  `id_naci` int(11) NOT NULL,
-  `id_docu` int(11) NOT NULL,
-  `documento` int(20) NOT NULL,
+  `codigo` int(11) NOT NULL,
+  `nacimientoId` int(11) NOT NULL,
+  `documento` int(11) NOT NULL,
+  `tipodocumentoId` int(20) NOT NULL,
   `nombre`   varchar(40) NOT NULL,
   `apellido` varchar(40) NOT NULL,
   `email`   varchar(60) NOT NULL,
@@ -24,6 +25,23 @@ CREATE TABLE IF NOT EXISTS `list_options` (
 ALTER TABLE `list_options` ADD PRIMARY KEY (`id`);
 ALTER TABLE `list_options` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+CREATE TABLE IF NOT EXISTS `telefonos` (
+  `id` int(11) NOT NULL,
+  `parentId` int(11) NOT NULL,
+  `parentType` int(3) NOT NULL,
+  `operadorId` int(11) NOT NULL,
+  `codigoArea` int(5) NOT NULL,
+  `nroTelefono` int(12) NOT NULL,
+  `status`  tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE `telefonos` ADD PRIMARY KEY (`id`);
+ALTER TABLE `telefonos` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+insert into telefonos (`parentId` ,  `parentType`,  `operadorId`,  `codigoArea`,  `nroTelefono`) values  (1,1,7,412,2759075);
+insert into telefonos (`parentId` ,  `parentType`,  `operadorId`,  `codigoArea`,  `nroTelefono`) values  (2,1,8,911,23400334);
+
 insert into list_options (parentId, description) values (null,'document');
 insert into list_options (parentId, description) values (null,'nationality');
 insert into list_options (parentId, description) values (null,'countries');
@@ -43,9 +61,11 @@ insert into list_options (parentId, description) values (3,'Venezolano');
 insert into list_options (parentId, description) values (3,'Argentino');
 insert into list_options (parentId, description) values (3,'Norte Americano');
 insert into list_options (parentId, description) values (3,'Canadiense');
+insert into list_options (parentId, description) values (3,'Español');
 
 insert into list_options (parentId, description) values (4,'Venezuela');
 insert into list_options (parentId, description) values (4,'Argentina');
+insert into list_options (parentId, description) values (4,'España');
 
 
 insert into list_options (parentId, description) values (17,'Miranda');

@@ -2,8 +2,9 @@ import { OptionsItems } from './options.model';
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { retry, catchError, map } from 'rxjs/operators';
+import { retry, catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
+import { ErrorsItem } from './errors.model';
 
 @Injectable({
   providedIn: 'root'
@@ -76,7 +77,7 @@ private serverPostRequest(url: string, params ) : Observable<any[] | any> {
 
    // Error handling 
    handleError(error:any) {
-    let errorMessage = '';
+    let errorMessage: ErrorsItem;
     console.log(error);
     if(error.error instanceof ErrorEvent) {
       // Get client-side error
@@ -84,13 +85,22 @@ private serverPostRequest(url: string, params ) : Observable<any[] | any> {
     } else {
       switch (error.status) {
         case 0:
-        errorMessage = `El servidor no Responde`;  
+        errorMessage = {
+          status: error.statusText,
+          text: `El servidor no Responde`
+        }; 
         break;
         case 200:
-        errorMessage = error.error.text;
+        errorMessage = {
+          status: error.statusText,
+          text: error.error.text
+        };
           break;
         default:
-        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+        errorMessage = {
+          status: error.statusText,
+          text: `Error Code: ${error.status}\nMessage: ${error.message}`
+        };
       }
       // Get server-side error
       

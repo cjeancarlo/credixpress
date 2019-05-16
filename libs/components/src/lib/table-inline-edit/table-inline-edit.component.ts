@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { TableElementDataService } from './table-element-data.service';
 import { TableElement } from './table-element';
 import { TableDataSource } from './table-data-source';
@@ -12,7 +12,6 @@ import { FormControl } from '@angular/forms';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ComponentType } from '@angular/core/src/render3';
 import { ModelObject } from '../models/object.models';
-import { TableElementFactory } from './table-element.factory';
 import { Store } from '@ngrx/store';
 @Component({
   selector: 'credix-table-inline-edit',
@@ -33,10 +32,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   faTimes = faTimes;
   faSave = faSave;
   modelObject: ModelObject;
-  
-
   dataSource: TableDataSource<any>;
-
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -57,31 +53,38 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
 
     this.dataSource.paginator = this.paginator;
 
-    this.selection.onChange.subscribe(row => {
-      this.disableDetailsButtons = row.source.selected.length === 1 ? false : true
+    this.selection.onChange.subscribe(selectedRow => {
+      this.disableDetailsButtons = selectedRow.source.selected.length === 1 ? false : true
     })
 
-
-    this.store.select(state => state['empleados'])
+    let row: TableElement<any> ;
+    this.store.select(state => state[this.modelObject.storeName])
     .subscribe( state => {
       if (state.error) {
-          this.openSnackBar([{ type: 'msg', msg: state.error  }]);
-          this.selection.clear();
+          this.openSnackBar([{ type: 'msg', msg: state.error.text  }]);
           return;
+          
         } else {
-          if (state.action === 'LOAD_INSERT_SUCCESS' || state.action === 'LOAD_UPDATE_SUCCESS' )
-         this.snackBar.openFromComponent(MessageComponent, {
-           data: [{ type: 'msg', msg: ' Datos Actualizados ' }],
-           duration: 3000,
-          });
-        }
-    
-      })
+          if (state.action === 'LOAD_INSERT_SUCCESS' || state.action === 'LOAD_UPDATE_SUCCESS' ){
 
+            row =  this.selection.selected[0];
+
+           if (!row.confirmEditCreate()) {
+             this.openSnackBar(row.errorsArray);
+             return;
+           };
+          
+           this.snackBar.openFromComponent(MessageComponent, {
+            data: [{ type: 'msg', msg: ' Datos Actualizados ' }],
+            duration: 3000,
+           });
+           this.selection.clear();
+          }
+        }
+      })
   }
 
   ngAfterViewInit() { }
-
   /** metodo define el filtro basado en el Objeto ""ModelObject.columns.search:true"" 
     y crea un arreglo con las columnas habilitadas pára la busqueda*/
   private filterDefinition() {
@@ -113,20 +116,10 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   createNew() {
     this.filterInput.setValue(null);
     this.applyFilter('')
-
     const pos = this.paginator.pageIndex * this.paginator.pageSize;
-
-    const row = TableElementFactory.createTableElement({
-      id: -1,
-      editing: true,
-      currentData: null,
-      source: null,
-      validator: null,
-      errorsArray: []
-    });
+    const row =  this.dataSource.createNew(pos);
 
     this.SetSelection(row);
-    this.dataSource.createNew(pos);
   }
 
   startEditing(row: TableElement<any>) {
@@ -167,7 +160,6 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   }
 
   confirmEditCreate(row: TableElement<any>) {
-    
     /**si estoy editando y no modifico ningun data no hay por que hacer una llamada el servidor */
     if (JSON.stringify(row.originalData).toString() === JSON.stringify(row.currentData).toString()) {
       this.openSnackBar([{ type: 'msg', msg: ' No hay cambios que guardar' }]);
@@ -181,12 +173,6 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (!row.confirmEditCreate()) {
-      this.openSnackBar(row.errorsArray);
-      return;
-    };
-
-    
     const flatObject ={};
     Object.keys(row.currentData).forEach((key) => {
       if (typeof row.currentData[key] === 'object'){
@@ -196,15 +182,11 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       }
   });
 
-  console.log(flatObject);
-
-    if(row.id === -1){
-    this.store.dispatch(new this.tableElementDataService.actions.LoadInsertAction( flatObject ));
-  } else {
-    this.store.dispatch(new this.tableElementDataService.actions.LoadUpdateAction( flatObject ));
-  }
-
-    this.selection.clear();
+  if(row.id === -1){
+      this.store.dispatch(new this.tableElementDataService.actions.LoadInsertAction( flatObject ));
+    } else {
+      this.store.dispatch(new this.tableElementDataService.actions.LoadUpdateAction( flatObject ));
+    }
   }
 
   private openSnackBar(data: any) {

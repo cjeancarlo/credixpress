@@ -15,6 +15,7 @@ export class TelefonoValidatorService implements ValidatorService {
   }
 
   public TelefonoObject: ModelObject = {
+    storeName: 'telefono',
     primaryKey: 'codigo_tele',
     deleteInfo: { 
       question: '¿ Seguro desea eliminar ?',

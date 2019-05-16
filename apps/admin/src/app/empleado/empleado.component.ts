@@ -7,6 +7,7 @@ import { RootState } from '../root-store/root-state';
 import { Store } from '@ngrx/store';
 import  *  as empleadosActions  from './store/actions';
 import { Subscription } from 'rxjs';
+import { ErrorsItem } from '@credix/back-end';
 @Component({
   selector: 'credix-empleado',
   templateUrl: './empleado.component.html',
@@ -18,7 +19,7 @@ import { Subscription } from 'rxjs';
 
 export class EmpleadoComponent implements OnInit, OnDestroy {
   loading: boolean;
-  error: any;
+  error: ErrorsItem;
   loaded = false;
   subscribe: Subscription;  
 

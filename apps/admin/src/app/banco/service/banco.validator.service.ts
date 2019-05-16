@@ -16,6 +16,7 @@ export class BancoValidatorService implements ValidatorService {
 
   public BancoObject : ModelObject = {
     primaryKey: 'codigo',
+    storeName: 'banco',
     deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
       question: '¿ Seguro desea eliminar ?',
       infoField: 'nombre'

@@ -14,6 +14,7 @@ export class ClienteValidatorService implements ValidatorService {
   }
 
   public ClienteObject: ModelObject = {
+    storeName:'cliente',
     primaryKey: 'codigo',
     deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
       question: '¿ Seguro desea eliminar ?',

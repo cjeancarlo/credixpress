@@ -3,10 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ValidatorService, TelefonoComponent, ModelObject } from '@credix/components';
 import { UbicacionService  } from '@credix/back-end';
 
-
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -14,8 +10,8 @@ export class EmpleadoValidatorService implements ValidatorService {
 
   constructor( private _ubicacionService: UbicacionService   ){   }
 
-  
   public EmpleadoObject: ModelObject = {
+    storeName: 'empleados',
     primaryKey: 'id',
     deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
       question: '¿ Seguro desea eliminar ?',
@@ -75,7 +71,6 @@ export class EmpleadoValidatorService implements ValidatorService {
   getRowValidator(): FormGroup {
     return this.buildformGroup();
   }
- 
 
   private buildformGroup(): FormGroup {
     this.fGroup = new FormGroup({});
@@ -86,8 +81,6 @@ export class EmpleadoValidatorService implements ValidatorService {
   }
 
 
-
-  
 }
 
 

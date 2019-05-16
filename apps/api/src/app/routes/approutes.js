@@ -23,5 +23,11 @@ app.route('/listAllOptions/')
   app.route('/EditOrCreateEmpleado/')
   .post(optionList.EditOrCreateEmpleado);
 
+  app.route('/listTelefonos/')
+  .post(optionList.getlistTelefonos);
+
+  app.route('/deleteTelefono/')
+  .post(optionList.deleteTelefono);
+
 };
 

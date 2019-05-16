@@ -11,6 +11,7 @@ export class OptionsValidatorService implements ValidatorService {
   constructor( private _ubicacionService: UbicacionService){ }
 
   public OptionsObject: ModelObject = {
+    storeName:'options',
     primaryKey: 'id',
     deleteInfo: { /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
       question: '¿ Seguro desea eliminar ?',

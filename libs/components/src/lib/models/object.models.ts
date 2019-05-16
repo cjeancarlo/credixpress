@@ -1,6 +1,5 @@
 import { ValidatorFn } from '@angular/forms';
-import { OptionsItems } from '@credix/back-end';
-import { Observable } from 'rxjs';
+
 
 
 
@@ -49,6 +48,7 @@ export interface FieldType {
 export interface ModelObject {
     /**clave primaria, nombre del campo que contendra valores unicos  */
     primaryKey: string,
+    storeName: string,
     /**informacion que va ser tomada para informar al usuario que registro esta eliminado*/
     deleteInfo: { 
       question: string

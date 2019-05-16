@@ -31,7 +31,7 @@ connection.executeQuery = function executeQuery(query, param, result, Dmlreturn 
 function handlerError(error) {
     if (error.sqlMessage) {
         return (translateError(error));
-    } else { return  (null, { error: error, handled: 'no' }); }
+    } else { return  (null, { error: error }); }
 }
 
 function translateError(error){
@@ -43,7 +43,7 @@ function translateError(error){
     
     switch (error.code) {
      case "ER_WARN_DATA_OUT_OF_RANGE":
-           return "Valor fuera de Rango para el campo" + col; 
+           return "Valor fuera de Rango para el campo " + col; 
      default:
             return error;
  }
