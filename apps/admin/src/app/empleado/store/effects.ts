@@ -30,7 +30,6 @@ export class EmpleadosEffects {
 
                             throw updatedEmpleado;
                         }
-
                         return new empleadosActions.LoadUpdateSuccessAction(updatedEmpleado[0]);
                     }
                     ),

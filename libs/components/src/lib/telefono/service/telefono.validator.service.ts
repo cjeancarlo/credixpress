@@ -15,18 +15,18 @@ export class TelefonoValidatorService implements ValidatorService {
   }
 
   public TelefonoObject: ModelObject = {
-    storeName: 'telefono',
-    primaryKey: 'codigo_tele',
+    storeName: 'telefonos',
+    primaryKey: 'id',
     deleteInfo: { 
       question: '¿ Seguro desea eliminar ?',
-      infoField: 'nro_telefono'
+      infoField: 'nroTelefono'
     },
     fields: [
       { name: 'actionsColumn', editType: 'ACTIONSCOLUMN' },
-      { name: 'codigo_parent', type: 'number', search: true, editType: 'NONE', label: 'Codigo' },
-      { name: 'codigo_tele', type: 'number', search: true, editType: 'NONE', label: 'Codigo' },
+      { name: 'parentId',   type: 'number', search: false, editType: 'NONE', label: 'parentId' },
+      { name: 'parentType', type: 'number', search: false, editType: 'NONE', label: 'parentType' },
       {
-        name: 'codigo_oper', type: 'number', search: true, editType: 'SELECT',  label: 'Operador',
+        name: 'operadorId', type: 'number', search: true, editType: 'SELECT',  label: 'Operador',
         validators: [Validators.required],
         selectConfig: { 
           filterField: 'description',
@@ -36,15 +36,15 @@ export class TelefonoValidatorService implements ValidatorService {
         }
       },
       { 
-        name: 'codigo_area', type: 'number', search: true, editType: 'INPUT',  label: 'Cod. Area',
+        name: 'codigoArea', type: 'number', search: true, editType: 'INPUT',  label: 'Cod. Area',
         validators: [Validators.required] 
       },
       { 
-        name: 'nro_telefono', type: 'string', search: true, editType: 'INPUT',  label: 'Nro. Telefono',
+        name: 'nroTelefono', type: 'string', search: true, editType: 'INPUT',  label: 'Nro. Telefono',
         validators: [Validators.required] 
       },
       { 
-        name: 'default ', type: 'boolean', search: true, editType: 'SLIDE',  label: 'Predeterminado',
+        name: 'principal', type: 'boolean', search: true, editType: 'SLIDE',  label: 'Principal',
         validators: [Validators.required] 
       },
     ]

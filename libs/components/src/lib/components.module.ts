@@ -14,12 +14,20 @@ import { DialogComponent } from './dialog/dialog.component';
 import { TelefonoComponent } from './telefono/telefono.component';
 import { DisplayErrorComponent } from './display-error/display-error.component';
 import { LoadingComponent } from './loading/loading.component';
+import { StoreModule } from '@ngrx/store';
+import { telefonoReducer } from './telefono/store/reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { TelefonosEffects } from './telefono/store/effects';
 
 
 
 @NgModule({
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
-  declarations: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent, TelefonoComponent, DisplayErrorComponent, LoadingComponent],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule,
+    
+    StoreModule.forFeature('telefonos', telefonoReducer),
+    EffectsModule.forFeature([TelefonosEffects])],
+  
+    declarations: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent, TelefonoComponent, DisplayErrorComponent, LoadingComponent],
   exports: [TableInlineEditComponent, SelectComponent, InputComponent, DisplayComponent, SlideComponent, MessageComponent, PrintErrorComponent, DialogComponent, TelefonoComponent, CommonModule, MaterialModule, ReactiveFormsModule, DisplayErrorComponent, LoadingComponent],
   entryComponents: [MessageComponent, DialogComponent,TelefonoComponent]
 })

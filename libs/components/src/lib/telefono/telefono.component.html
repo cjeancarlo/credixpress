@@ -3,4 +3,7 @@
     {{data['row'].codigo_empl}} | {{data['row'].nombre }} {{data['row'].apellido }}
 </h2>
 
-<credix-table-inline-edit></credix-table-inline-edit>
+<credix-table-inline-edit *ngIf="loaded" ></credix-table-inline-edit> 
+<credix-loading *ngIf="loading"></credix-loading>
+<credix-display-error  *ngIf="error && error.status !== 'OK'" [error]=error.text ></credix-display-error>
+

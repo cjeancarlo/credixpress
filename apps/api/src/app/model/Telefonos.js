@@ -1,7 +1,8 @@
 var sql = require('../database/connect.js');
 
 exports.listTelefonos = function listTelefonos(param, result) {
-    sql.executeQuery(getDml("SELECT", param), null, result);
+    sql.executeQuery(
+    `${getDml("SELECT")} WHERE parentId = ${param.parentId} and parentType = ${param.parentType}` , null, result);
 };
 
 exports.deleteTelefono = function deleteTelefono(param, result) {
@@ -11,26 +12,28 @@ exports.deleteTelefono = function deleteTelefono(param, result) {
 
 function getDml(action, telefono = null) {
 
-    console.log(telefono.parentType);
+    console.log(telefono);
     switch (action) {
         case "INSERT":
             return ` INSERT INTO telefonos 
-                    (parentId, parentType, operadorId, codigoArea, nroTelefono) VALUES (
+                    (parentId, parentType, operadorId, codigoArea, principal, nroTelefono) VALUES (
                     ${telefono.parentId},
                     ${telefono.parentType},
                     ${telefono.operadorId},
                     ${telefono.codigoArea},
-                    "${telefono.nroTelefono}") `;
+                    ${telefono.principal},
+                    ${telefono.nroTelefono})`;
         case "UPDATE":
             return `UPDATE telefonos SET
                     operadorId=${telefono.operadorId},
                     codigoArea=${telefono.codigoArea},
+                    principal=${telefono.principal},
                     nroTelefono="${telefono.nroTelefono}"
-                    where id = ?  `;
+                    where id = ${telefono.id}  `;
         case "DELETE":
             return `DELETE from telefonos where  id = ${telefono.id}`;
         case "SELECT":
-            return `select * from telefonos where  parentType = ${telefono.parentType}`;
+            return `select * from telefonos`;
         default:
             return "";
     }
@@ -44,5 +47,5 @@ exports.EditOrCreateTelefono = function EditOrCreateTelefono(telefono, result) {
         query = getDml("INSERT", telefono);
     }
     query = query.replace(/(\r\n|\n|\r)/gm, "");
-    sql.executeQuery(query, telefono.id, result, true, `${getDml("SELECT")} WHERE id = ? `);
+    sql.executeQuery(query, telefono.id, result, true, `${getDml("SELECT")} WHERE id = ?  and parentType = ${telefono.parentType} `);
 };

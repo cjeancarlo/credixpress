@@ -36,6 +36,8 @@ CREATE TABLE IF NOT EXISTS `telefonos` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+ALTER TABLE `telefonos` MODIFY `principal` boolean    DEFAULT false AFTER nroTelefono
+
 ALTER TABLE `telefonos` ADD PRIMARY KEY (`id`);
 ALTER TABLE `telefonos` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 

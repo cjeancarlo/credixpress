@@ -33,6 +33,8 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
   faSave = faSave;
   modelObject: ModelObject;
   dataSource: TableDataSource<any>;
+  private parenitId: number;
+  private parentType: number;
   
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -60,7 +62,15 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     let row: TableElement<any> ;
     this.store.select(state => state[this.modelObject.storeName])
     .subscribe( state => {
-      if (state.error) {
+
+        if (state.parentId){
+          this.parenitId =state.parentId;
+        }
+        if (state.parentType){
+          this.parentType =state.parentType;
+        }
+      
+        if (state.error) {
           this.openSnackBar([{ type: 'msg', msg: state.error.text  }]);
           return;
           
@@ -178,7 +188,18 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       if (typeof row.currentData[key] === 'object'){
         flatObject[key] = row.currentData[key].id;
       }else {
-        flatObject[key] = row.currentData[key];
+        
+        
+        switch (key) {
+          case 'parentId':
+            flatObject[key] =  this.parenitId;             
+            break;
+            case 'parentType':
+            flatObject[key] =  this.parentType;   
+            break;
+          default:
+          flatObject[key] =  row.currentData[key];
+        }
       }
   });
 

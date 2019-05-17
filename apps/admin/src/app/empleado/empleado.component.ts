@@ -35,7 +35,6 @@ export class EmpleadoComponent implements OnInit, OnDestroy {
         this.loading = empleados.isLoading
         this.error = empleados.error;
         this.loaded = empleados.isLoaded;
-
         
       }) ;
       }
@@ -55,6 +54,7 @@ export class EmpleadoComponent implements OnInit, OnDestroy {
   }
 
 ngOnDestroy(){
+  console.log('empleado destroy');
   this.subscribe.unsubscribe()
 }
   

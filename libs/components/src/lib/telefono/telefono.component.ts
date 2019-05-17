@@ -5,16 +5,11 @@ import { TelefonoValidatorService } from './service/telefono.validator.service';
 import { TableDataSource } from '../table-inline-edit/table-data-source';
 import { TableElementDataService } from '../table-inline-edit/table-element-data.service';
 import { ModelObject } from '../models/object.models';
-
-export class Telefono {
-  codigo_parent: number;
-  codigo_tele: number;
-  codigo_oper: number;
-  codigoArea: number;
-  nroTelefono: string;
-}
-
-
+import { ErrorsItem } from '@credix/back-end'
+import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import  *  as telefonosActions  from './store/actions';
+import { Telefono } from './telefono.model';
 @Component({
   selector: 'credix-telefono',
   templateUrl: './telefono.component.html',
@@ -25,40 +20,56 @@ export class Telefono {
 })
 export class TelefonoComponent implements OnInit, OnDestroy {
 
-  TelefonoList = [ {
-    codigo_parent: 41,
-    codigo_tele: 1,
-    codigo_oper: 3006,
-    codigo_area: '15',
-    nro_telefono: '23940000',
-  },{
-    codigo_parent: 40,
-    codigo_tele: 1,
-    codigo_oper: 3005,
-    codigo_area: '11',
-    nro_telefono: '23940334',
-  }];
+  loading: boolean;
+  error: ErrorsItem;
+  loaded = false;
+  subscribe: Subscription;  
 
   /**guarda el modelObject del Padre */
   private ParentmodelObject : ModelObject;
+  private ParentActions: any;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {},
-  public  telefonoValidator: TelefonoValidatorService, 
-  private tableElementDataService: TableElementDataService
-  ) { 
-    const TelefonosFiltrados =  this.TelefonoList.filter(tels =>   tels.codigo_parent === this.data['parent'] );
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: {},
+    private store: Store<any>,
+    public  telefonoValidator: TelefonoValidatorService, 
+    private tableElementDataService: TableElementDataService) {
 
-    this.tableElementDataService.dataSource = new TableDataSource<any>(TelefonosFiltrados, Telefono,  this.telefonoValidator);   
-    /**guarda temporalmente el modelObject del padre  */;
+      /**guarda temporalmente el modelObject del padre  */;
     this.ParentmodelObject  = this.tableElementDataService.modelObject;
+    this.ParentActions  = this.tableElementDataService.actions;
+
     this.tableElementDataService.modelObject = this.telefonoValidator.TelefonoObject;
-   }
+    this.tableElementDataService.actions = telefonosActions;
+      
 
-  ngOnInit() { 
-console.log(this.data['row']);
-
-  }
-
+      this.subscribe=  this.store.select('telefonos').subscribe(telefonos => {
+        this.loading = telefonos.isLoading
+        this.error = telefonos.error;
+        this.loaded = telefonos.isLoaded;
+       
+      }) ;
+      }
+      ngOnInit() {
+        this.store.select(state => state.telefonos)
+        .subscribe( state =>  {
+         if  ( state.isLoaded) {
+           this.tableElementDataService.dataSource  = new TableDataSource<any>(
+             state.telefonos,     
+             Telefono, 
+             this.telefonoValidator); 
+           }
+         })
+         console.log(this.data['row']);
+       this.store.dispatch(new telefonosActions.LoadRequestAction(
+          {
+            parentId: this.data['row'].id,
+            parentType: 1
+          }
+         ));
+       
+      }
+   
   /** Called once, before the instance is destroyed.
   * Add 'implements OnDestroy' to the class.
   */
@@ -66,7 +77,9 @@ console.log(this.data['row']);
     /**retorna al modelo original modelObject esto evita que el modelo del hijo
      * sobre escriba al del padre */
     this.tableElementDataService.modelObject = this.ParentmodelObject;
-    
+    this.tableElementDataService.actions =   this.ParentActions;
+    console.log('destroy');
+    this.subscribe.unsubscribe();
   }
 
 

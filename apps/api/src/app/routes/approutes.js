@@ -16,15 +16,19 @@ app.route('/listAllOptions/')
   app.route('/listOptionByCategory/')
   .post(optionList.getlistOptionByCategory );
 
-
+  /**rutas Empleados */
   app.route('/listEmpleados/')
   .post(optionList.getlistEmpleados);
 
   app.route('/EditOrCreateEmpleado/')
   .post(optionList.EditOrCreateEmpleado);
 
+  /**rutas telefonos */
   app.route('/listTelefonos/')
   .post(optionList.getlistTelefonos);
+
+  app.route('/EditOrCreateTelefono/')
+  .post(optionList.EditOrCreateTelefono);
 
   app.route('/deleteTelefono/')
   .post(optionList.deleteTelefono);
