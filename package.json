@@ -82,7 +82,7 @@
     "pino": "^5.12.1",
     "pino-pretty": "^2.6.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "~6.3.3",
+    "rxjs": "~6.5.2",
     "schemaglue": "^4.0.2",
     "sequelize": "^5.8.3",
     "sequelize-typescript": "^0.6.8-beta.0",

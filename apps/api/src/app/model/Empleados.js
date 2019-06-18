@@ -33,7 +33,7 @@ function getDml(action, empleado = null) {
         case "DELETE":
             return `DELETE from telefonos where  id = ${empleado.id}`;
         case "SELECT":
-            return `select * from empleados`;
+            return `SELECT * from empleados`;
         default:
             return "";
     }
