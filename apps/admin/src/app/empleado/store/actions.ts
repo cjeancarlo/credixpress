@@ -6,9 +6,12 @@ export const LOAD_REQUEST = '[Empleado] Load Request' ;
 export const LOAD_FAILURE = '[Empleado] Load Failure';
 export const LOAD_SUCCESS = '[Empleado] Load Success';
 export const LOAD_INSERT = '[Empleado] INSERT';
+export const LOAD_INSERT_SUCCESS= '[Empleado] INSERT STATE STORE';
 export const LOAD_UPDATE = '[Empleado] UPDATE';
 export const LOAD_UPDATE_SUCCESS = '[Empleado] UPDATE STATE STORE';
-export const LOAD_INSERT_SUCCESS= '[Empleado] INSERT STATE STORE';
+export const LOAD_DELETE = '[Empleado] DELETE';
+export const LOAD_DELETE_SUCCESS= '[Empleado] DELETE STATE STORE';
+
 
 export class LoadInsertAction implements Action {
   readonly type = LOAD_INSERT;
@@ -34,6 +37,15 @@ export class LoadInsertSuccessAction implements Action {
   constructor(public  empleado:Empleado  ) {}
 }
 
+export class LoadDeleteAction implements Action {
+  readonly type = LOAD_DELETE;
+  constructor(public  id: number  ) {}
+}
+export class LoadDeleteSuccessAction implements Action {
+  readonly type = LOAD_DELETE_SUCCESS;
+  constructor(public  id: number  ) {}
+}
+
 export class LoadFailureAction implements Action {
   readonly type = LOAD_FAILURE;
   constructor(public error: string ) {}
@@ -45,6 +57,8 @@ export class LoadSuccessAction implements Action {
 }
 
 export type ActionTypes = 
+LoadDeleteAction | 
+LoadDeleteSuccessAction | 
 LoadRequestAction | 
 LoadFailureAction | 
 LoadSuccessAction | 

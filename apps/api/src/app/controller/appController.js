@@ -47,6 +47,12 @@ exports.EditOrCreateEmpleado = function (req, res) {
   });
 };
 
+exports.deleteEmpleado = function (req, res) {
+  listEmpleados.DeleteEmpleado(req.body, function (err, result) {
+    send(err, result, res);
+  });
+};
+
 /** TELEFONOS */
 var listTelefonos = require('../model/Telefonos');
 

@@ -6,7 +6,28 @@ import {  initialState, EmpleadoState } from './state';
 export function empleadoReducer(state = initialState, action: empleadoActions.ActionTypes): EmpleadoState {
   switch (action.type) {
 
-      
+    case empleadoActions.LOAD_DELETE: {
+      return {
+        ...state,
+        isLoading: true,
+        isLoaded: false,
+        error: null,
+        action: "LOAD_DELETE"
+      };
+    } 
+
+    case empleadoActions.LOAD_DELETE_SUCCESS: {
+      return {
+          ...state,
+        empleados:  function() { 
+          return state.empleados.filter( del=>  del.id !== action.id )}(),
+        isLoading: false,
+        isLoaded: true,
+        error: null,
+        action: "LOAD_DELETE_SUCCESS"
+      };
+    }
+    
       case empleadoActions.LOAD_REQUEST: {
         return {
           ...state,

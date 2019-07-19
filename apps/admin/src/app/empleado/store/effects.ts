@@ -62,6 +62,29 @@ export class EmpleadosEffects {
             )
         );
 
+        @Effect() deleteEmpleado$ = this.actions$
+        .pipe(
+            ofType(empleadosActions.LOAD_DELETE),
+            switchMap(
+                (empleado: empleadosActions.LoadDeleteAction ) => this._empleadoDataService.getDelete(empleado.id)
+                .pipe(
+                    map(updatedEmpleado => {
+                        if (!updatedEmpleado[0]) {
+
+                            throw updatedEmpleado;
+                        }
+                        return new empleadosActions.LoadInsertSuccessAction(updatedEmpleado[0]);
+                    }
+                    ),
+                    catchError(error => {
+                        console.log(error);
+                        return of(new empleadosActions.LoadFailureAction(error));
+                    }))
+
+            )
+        );
+        
+
 
     constructor(private actions$: Actions, private _empleadoDataService: EmpleadoDataService) { }
 

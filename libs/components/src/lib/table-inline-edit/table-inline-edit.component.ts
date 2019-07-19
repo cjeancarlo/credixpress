@@ -13,6 +13,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { ComponentType } from '@angular/core/src/render3';
 import { ModelObject } from '../models/object.models';
 import { Store } from '@ngrx/store';
+import { LoadDeleteAction } from '../../../../../apps/admin/src/app/empleado/store/actions';
 @Component({
   selector: 'credix-table-inline-edit',
   templateUrl: './table-inline-edit.component.html',
@@ -77,8 +78,8 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
         } else {
           if (state.action === 'LOAD_INSERT_SUCCESS' || state.action === 'LOAD_UPDATE_SUCCESS' ){
 
+            
             row =  this.selection.selected[0];
-
            if (!row.confirmEditCreate()) {
              this.openSnackBar(row.errorsArray);
              return;
@@ -183,30 +184,12 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const flatObject ={};
-    Object.keys(row.currentData).forEach((key) => {
-      if (typeof row.currentData[key] === 'object'){
-        flatObject[key] = row.currentData[key].id;
-      }else {
-        
-        
-        switch (key) {
-          case 'parentId':
-            flatObject[key] =  this.parenitId;             
-            break;
-            case 'parentType':
-            flatObject[key] =  this.parentType;   
-            break;
-          default:
-          flatObject[key] =  row.currentData[key];
-        }
-      }
-  });
+    
 
   if(row.id === -1){
-      this.store.dispatch(new this.tableElementDataService.actions.LoadInsertAction( flatObject ));
+      this.store.dispatch(new this.tableElementDataService.actions.LoadInsertAction( this.flatObject(row) ));
     } else {
-      this.store.dispatch(new this.tableElementDataService.actions.LoadUpdateAction( flatObject ));
+      this.store.dispatch(new this.tableElementDataService.actions.LoadUpdateAction( this.flatObject(row) ));
     }
   }
 
@@ -236,6 +219,7 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.store.dispatch(new this.tableElementDataService.actions.LoadDeleteAction( 12  ));
         row.cancelOrDelete();
         this.snackBar.openFromComponent(MessageComponent, {
           data: [{ type: 'msg', msg: ' registro Eliminado ' }],
@@ -258,5 +242,28 @@ export class TableInlineEditComponent implements OnInit, AfterViewInit {
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
   }
+
+  private flatObject(row): any {
+  const fO ={};
+  Object.keys(row.currentData).forEach((key) => {
+    if (typeof row.currentData[key] === 'object'){
+      fO[key] = row.currentData[key].id;
+    }else {
+      
+      
+      switch (key) {
+        case 'parentId':
+          fO[key] =  this.parenitId;             
+          break;
+          case 'parentType':
+          fO[key] =  this.parentType;   
+          break;
+        default:
+        fO[key] =  row.currentData[key];
+      }
+    }
+});
+return fO;
+}
 
 }

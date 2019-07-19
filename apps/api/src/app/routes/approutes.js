@@ -23,6 +23,9 @@ app.route('/listAllOptions/')
   app.route('/EditOrCreateEmpleado/')
   .post(optionList.EditOrCreateEmpleado);
 
+  app.route('/deleteEmpleado/')
+  .post(optionList.deleteTelefono);
+
   /**rutas telefonos */
   app.route('/listTelefonos/')
   .post(optionList.getlistTelefonos);

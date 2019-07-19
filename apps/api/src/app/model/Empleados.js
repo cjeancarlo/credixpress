@@ -31,7 +31,7 @@ function getDml(action, empleado = null) {
                     email="${empleado.email}"
                     where id = ?  `;
         case "DELETE":
-            return `DELETE from telefonos where  id = ${empleado.id}`;
+            return `DELETE from empleado where  id = ${empleado.id}`;
         case "SELECT":
             return `SELECT * from empleados`;
         default:
@@ -49,3 +49,12 @@ exports.EditOrCreateEmpleado = function EditOrCreateEmpleado(empleado, result) {
     query = query.replace(/(\r\n|\n|\r)/gm, "");
     sql.executeQuery(query, empleado.id, result, true, `${getDml("SELECT")} WHERE id = ? `);
 };
+
+exports.DeleteEmpleado = function DeleteEmpleado(id, result) {
+    var query = "";
+    query = getDml("DELETE", id);
+    
+    query = query.replace(/(\r\n|\n|\r)/gm, "");
+    sql.executeQuery(query, id, result);
+};
+
